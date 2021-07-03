@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="report_plateText">
+        <item>ع</item>
+        <item>د</item>
+        <item>س</item>
+        <item>ب</item>
+        <item>ق</item>
+        <item>ی</item>
+    </string-array>
+</resources>

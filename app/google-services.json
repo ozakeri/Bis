@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "156136320703",
+    "firebase_url": "https://bis-app-inspection-2bc3b.firebaseio.com",
+    "project_id": "bis-app-inspection-2bc3b",
+    "storage_bucket": "bis-app-inspection-2bc3b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:156136320703:android:2df208214f489b7a",
+        "android_client_info": {
+          "package_name": "com.gap.bis_inspection"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "156136320703-d28ubrcdkeb7sc4f101cf0ktka4tfvtm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gap.bis_inspection",
+            "certificate_hash": "839a3195de5a06ef9068f871673f624b1ed975dc"
+          }
+        },
+        {
+          "client_id": "156136320703-34t4lvju4egcncq33673g92u8u1loppu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDx1lorCO-c3UFjQI83cNniRQiY5bdtQTI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "156136320703-34t4lvju4egcncq33673g92u8u1loppu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
