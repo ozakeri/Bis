@@ -332,7 +332,6 @@ public class SearchAdvertActivity extends AppCompatActivity {
 
                         if (!advertisementDetailVOJsonObject.isNull("id")) {
                             advertisementId = advertisementDetailVOJsonObject.getString("id");
-                            getProcessBisDataList(advertisementId);
                         }
 
                         if (!advertisementDetailVOJsonObject.isNull("actionProcessStatus")) {
@@ -1065,73 +1064,4 @@ public class SearchAdvertActivity extends AppCompatActivity {
 
     }
 
-    public void getProcessBisDataList(String id) {
-        class GetProcessBisDataList extends AsyncTask<Void, Void, Void> {
-            private String result;
-            private String errorMsg;
-            private ProgressDialog progressDialog = null;
-
-            @SuppressLint("StringFormatInvalid")
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                //progressBar.setVisibility(View.VISIBLE);
-                progressDialog = new ProgressDialog(SearchAdvertActivity.this);
-                progressDialog.setMessage(getResources().getString(R.string.label_progress_dialog));
-                progressDialog.setIndeterminate(true);
-                progressDialog.setCancelable(false);
-                progressDialog.show();
-
-                progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        GetProcessBisDataList.this.cancel(true);
-                        progressDialog.dismiss();
-                    }
-                });
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                progressDialog.dismiss();
-
-                try {
-                    JSONObject resultJson = new JSONObject(result);
-                    System.out.println("=====result=====" + result);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            protected Void doInBackground(Void... voids) {
-                try {
-
-                    System.out.println("=====id=====" + id);
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("username", application.getCurrentUser().getUsername());
-                    jsonObject.put("tokenPass", application.getCurrentUser().getBisPassword());
-                    jsonObject.put("advertId", id);
-
-                    //jsonObject.put("carInfoType", carInfoType);
-                    MyPostJsonService postJsonService = new MyPostJsonService(databaseManager, SearchAdvertActivity.this);
-                    try {
-                        result = postJsonService.sendData("getProcessBisSettingVOList", jsonObject, true);
-                    } catch (SocketTimeoutException | SocketException e) {
-                        errorMsg = getResources().getString(R.string.Some_error_accor_contact_admin);
-                    } catch (WebServiceException e) {
-                        Log.d("RegistrationFragment", e.getMessage());
-                    }
-
-                } catch (JSONException e) {
-                    Log.d("RegistrationFragment", e.getMessage());
-                }
-                return null;
-            }
-        }
-
-        new GetProcessBisDataList().execute();
-    }
 }

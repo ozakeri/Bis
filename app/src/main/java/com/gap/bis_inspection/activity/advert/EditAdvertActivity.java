@@ -75,10 +75,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 
 public class EditAdvertActivity extends AppCompatActivity {
@@ -200,7 +204,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                 }
 
                 btn_edit.setText("ویرایش");
-                btn_edit.setVisibility(View.GONE);
+                //btn_edit.setVisibility(View.GONE);
                 txt_title.setText("ویرایش");
                 txt_processName.setText(processBisSettingName);
                 edt_description.setText(description);
@@ -283,7 +287,7 @@ public class EditAdvertActivity extends AppCompatActivity {
 
 
         System.out.println("conf2Req=====" + conf2Req);
-        if (conf2Req || application.getPermissionMap().containsKey(conf2Permission)) {
+        if (conf2Req) {
             btn_nonConfirm.setVisibility(View.VISIBLE);
         } else if (processStatus != 1) {
             btn_nonConfirm.setVisibility(View.GONE);
@@ -683,6 +687,8 @@ public class EditAdvertActivity extends AppCompatActivity {
                     jsonObject.put("tokenPass", application.getCurrentUser().getBisPassword());
                     jsonObject.put("id", id);
                     jsonObject.put("advertDescription", description);
+                    jsonObject.put("localIp", getLocalIpAddress());
+
                     //jsonObject.put("carInfoType", carInfoType);
                     MyPostJsonService postJsonService = new MyPostJsonService(databaseManager, EditAdvertActivity.this);
                     try {
@@ -773,6 +779,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                     jsonObject.put("confirm", confirm);
                     jsonObject.put("advertId", advertisementId);
                     jsonObject.put("systemParameterStr", systemParameterStr);
+                    jsonObject.put("localIp", getLocalIpAddress());
 
                     System.out.println("id=====" + id);
                     System.out.println("advertDescription=====" + description);
@@ -1343,6 +1350,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                     jsonObject.put("id", advertisementId);
                     jsonObject.put("ProcessBisSettingId", id);
                     jsonObject.put("advertDescription", description);
+                    jsonObject.put("localIp", getLocalIpAddress());
                     //jsonObject.put("carInfoType", carInfoType);
                     MyPostJsonService postJsonService = new MyPostJsonService(databaseManager, EditAdvertActivity.this);
                     try {
@@ -1427,7 +1435,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                                 }
                             }
 
-                            if (conf2Req && processStatus == 1) {
+                            if (conf2Req) {
                                 btn_nonConfirm.setVisibility(View.VISIBLE);
                             } else {
                                 btn_nonConfirm.setVisibility(View.GONE);
@@ -1592,5 +1600,22 @@ public class EditAdvertActivity extends AppCompatActivity {
                 System.out.println("onErrorResponse===" + volleyError);
             }
         });
+    }
+
+    public static String getLocalIpAddress() {
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+                NetworkInterface intf = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
+                        return inetAddress.getHostAddress();
+                    }
+                }
+            }
+        } catch (SocketException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 }
