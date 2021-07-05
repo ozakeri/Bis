@@ -916,6 +916,13 @@ public class EditAdvertActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+
+        closeIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
     //========= cameraIntent for attachment

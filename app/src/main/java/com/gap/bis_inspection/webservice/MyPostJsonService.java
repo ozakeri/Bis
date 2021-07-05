@@ -76,7 +76,7 @@ public class MyPostJsonService {
 */
         //String baseService = AppController.getInstance().getSharedPreferences().getString(Constants.DOMAIN_WEB_SERVICE_URL, null);
         //String baseService = "https://bis.tehran.ir";
-        String baseService = "http://192.168.2.180:8080";
+        String baseService = "http://192.168.2.72:8080";
         //String baseService = "http://192.168.2.110:8080";
         //String baseService = "http://192.168.7.16";
 
