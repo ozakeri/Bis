@@ -14,10 +14,10 @@ public class Constants {
     //public static final String DEFAULT_WEB_SERVICE_URL = "http://172.22.226.28/rfServices/";
     //public static final String DEFAULT_WEB_SERVICE_URL = "http://bis.isfahanptc.ir/rfServices/";
 
-    public static final String SITE = "http://192.168.2.72:8080";
+    //public static final String SITE = "http://192.168.2.72:8080";
    // public static final String SITE = "https://bis.isfahanptc.ir/";
    //public static final String SITE = "https://bis.tehran.ir";
-   //public static final String SITE = "http://192.168.2.180:8080";
+   public static final String SITE = "http://192.168.2.72:8080";
     public static final String WS = SITE + "/rfServices/";
 
     public static final String DOMAIN_WEB_SERVICE_URL = "DOMAIN_WEB_SERVICE_URL";

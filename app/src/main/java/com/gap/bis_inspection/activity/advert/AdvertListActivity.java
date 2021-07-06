@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,16 +56,20 @@ public class AdvertListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private String processName = "1";
     private GetAdList getAdList = null;
+    private TextView txt_count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advert_list);
 
+        txt_count = findViewById(R.id.txt_count);
         databaseManager = new DatabaseManager(this);
         coreService = new CoreService(databaseManager);
         MaterialSpinner spinner = findViewById(R.id.spinner);
         spinner.setItems(statusProcess);
+
+        txt_count.setText(" تعداد نتایج جستجو: " + CommonUtil.latinNumberToPersian("0"));
 
         if (getAdList != null) {
             getAdList.cancel(true);
@@ -164,6 +169,7 @@ public class AdvertListActivity extends AppCompatActivity {
             progressDialog.dismiss();
 
             try {
+                System.out.println("======result======" + result);
                 if (result != null){
                     JSONObject resultJson = new JSONObject(result);
                     if (errorMsg == null && !resultJson.isNull(Constants.SUCCESS_KEY)) {
@@ -181,6 +187,7 @@ public class AdvertListActivity extends AppCompatActivity {
                                 }
                                 AdvertListAdapter adapter = new AdvertListAdapter(advertisementList);
                                 recyclerView.setAdapter(adapter);
+                                txt_count.setText(" تعداد نتایج جستجو: " + CommonUtil.latinNumberToPersian(String.valueOf(advertisementList.size())));
                             }
                         }
                     } else {
