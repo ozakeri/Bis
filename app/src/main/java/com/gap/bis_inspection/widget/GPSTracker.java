@@ -52,7 +52,7 @@ public class GPSTracker extends Service implements LocationListener {
 
             if (!isGPSEnabled && !isNetworkEnabled) {
                 Toast toast = Toast.makeText(getApplicationContext(), R.string.error_location_null, Toast.LENGTH_LONG);
-                CommonUtil.showToast(toast);
+                CommonUtil.showToast(toast,GPSTracker.this);
                 toast.show();
             } else {
                 this.canGetLocation = true;

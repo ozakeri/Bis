@@ -130,7 +130,7 @@ public class RegistrationFragment extends Fragment {
                         AppController application = (AppController) Objects.requireNonNull(getActivity()).getApplication();
                         application.setCurrentUser(user);
                         Toast toast = Toast.makeText(getActivity(), R.string.send_code_activation_Toast, Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,getActivity());
                         toast.show();
                         showActivationPage();
                     } else {
@@ -138,18 +138,18 @@ public class RegistrationFragment extends Fragment {
                             errorMsg = resultJson.getString(Constants.ERROR_KEY);
                         }
                         Toast toast = Toast.makeText(getActivity(), errorMsg, Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,getActivity());
                         toast.show();
                     }
                 } catch (JSONException e) {
                     Log.d("RegistrationFragment", e.getMessage());
                     Toast toast = Toast.makeText(getActivity(), getResources().getString(R.string.Some_error_accor_contact_admin), Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,getActivity());
                     toast.show();
                 }
             } else {
                 Toast toast = Toast.makeText(getActivity(), (errorMsg != null) ? errorMsg : getResources().getString(R.string.Some_error_accor_contact_admin), Toast.LENGTH_LONG);
-                CommonUtil.showToast(toast);
+                CommonUtil.showToast(toast,getActivity());
                 toast.show();
             }
             // progressBar.setVisibility(View.GONE);

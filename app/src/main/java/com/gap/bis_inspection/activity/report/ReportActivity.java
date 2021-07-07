@@ -235,7 +235,7 @@ public class ReportActivity extends AppCompatActivity {
 
                 if (reportStrVT.getText().toString().equals("")) {
                     Toast toast = Toast.makeText(getApplicationContext(), R.string.label_reportStrTv_NotNull, Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,ReportActivity.this);
                     toast.show();
                 } else {
                     //complaintReport = new ComplaintReport();
@@ -255,7 +255,7 @@ public class ReportActivity extends AppCompatActivity {
                     new Thread(new SaveComplaintReportTask()).start();
                     finish();
                     Toast toast = Toast.makeText(getApplicationContext(), R.string.label_report_sendMsg, Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,ReportActivity.this);
                     toast.show();
 
                     System.out.println("getId====" + complaintReport.getId());

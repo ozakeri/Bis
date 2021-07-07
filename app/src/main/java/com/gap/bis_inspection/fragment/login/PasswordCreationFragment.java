@@ -108,7 +108,7 @@ public class PasswordCreationFragment extends Fragment {
                         showHomePage();
                     } else {
                         Toast toast = Toast.makeText(getActivity(), R.string.label_reportStrTv_NotNull, Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,getActivity());
                         toast.show();
                     }
                 } else {
@@ -121,12 +121,12 @@ public class PasswordCreationFragment extends Fragment {
                             new ASync().execute();
                         } else {
                             Toast toast = Toast.makeText(getActivity(), R.string.label_reportStrTv_NotNull, Toast.LENGTH_LONG);
-                            CommonUtil.showToast(toast);
+                            CommonUtil.showToast(toast,getActivity());
                             toast.show();
                         }
                     } else {
                         Toast toast = Toast.makeText(getActivity(), R.string.label_reportStrTv_NotNull, Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,getActivity());
                         toast.show();
                     }
                 }
@@ -306,7 +306,7 @@ public class PasswordCreationFragment extends Fragment {
                             databaseManager.updateUser(user);
                             application.setPermissionMap(coreService.getUserPermissionMap(user.getId()));
                             Toast toast = Toast.makeText(getActivity(), R.string.success_login_Toast, Toast.LENGTH_LONG);
-                            CommonUtil.showToast(toast);
+                            CommonUtil.showToast(toast,getActivity());
                             toast.show();
                             showHomePage();
 
@@ -315,7 +315,7 @@ public class PasswordCreationFragment extends Fragment {
                                 errorMsg = resultJson.getString(Constants.ERROR_KEY);
                             }
                             Toast toast = Toast.makeText(getActivity(), errorMsg, Toast.LENGTH_LONG);
-                            CommonUtil.showToast(toast);
+                            CommonUtil.showToast(toast,getActivity());
                             toast.show();
                         }
                     } catch (JSONException | UnsupportedEncodingException | NoSuchAlgorithmException e) {
@@ -324,7 +324,7 @@ public class PasswordCreationFragment extends Fragment {
                 }
             } else {
                 Toast toast = Toast.makeText(getActivity(), errorMsg, Toast.LENGTH_LONG);
-                CommonUtil.showToast(toast);
+                CommonUtil.showToast(toast,getActivity());
                 toast.show();
             }
         }

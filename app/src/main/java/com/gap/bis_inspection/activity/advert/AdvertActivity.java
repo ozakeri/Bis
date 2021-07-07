@@ -143,7 +143,7 @@ public class AdvertActivity extends AppCompatActivity {
 
                     if (result.length() == 0) {
                         Toast toast = Toast.makeText(AdvertActivity.this, "تبلیغات یافت نشد", Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,AdvertActivity.this);
                         toast.show();
                         return;
                     }
@@ -155,12 +155,12 @@ public class AdvertActivity extends AppCompatActivity {
                         startActivity(intent);
                     } else {
                         Toast toast = Toast.makeText(AdvertActivity.this, "تبلیغات یافت نشد", Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,AdvertActivity.this);
                         toast.show();
                     }
                 } else {
                     Toast toast = Toast.makeText(AdvertActivity.this, "تبلیغات یافت نشد", Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,AdvertActivity.this);
                     toast.show();
                 }
 

@@ -461,7 +461,7 @@ public class SearchAdvertActivity extends AppCompatActivity {
                         }
                     } else {
                         Toast toast = Toast.makeText(SearchAdvertActivity.this, "result is Null", Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,SearchAdvertActivity.this);
                         toast.show();
                     }
                 } catch (JSONException e) {
@@ -855,7 +855,7 @@ public class SearchAdvertActivity extends AppCompatActivity {
                     showAttachDialog();
                 } else {
                     Toast toast = Toast.makeText(SearchAdvertActivity.this, "تعداد محدود", Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,SearchAdvertActivity.this);
                     toast.show();
                 }
 

@@ -110,7 +110,7 @@ public class DomainFragment extends Fragment {
                     new ASync().execute();
                 } else {
                     Toast toast = Toast.makeText(getActivity(), getResources().getString(R.string.label_check_network), Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,getActivity());
                     toast.show();
                 }
 
@@ -262,14 +262,14 @@ public class DomainFragment extends Fragment {
                             editor.apply();
 
                             Toast toast = Toast.makeText(getActivity(), getResources().getString(R.string.label_ActivationFragment_phoneNumber), Toast.LENGTH_LONG);
-                            CommonUtil.showToast(toast);
+                            CommonUtil.showToast(toast,getActivity());
                             toast.show();
                             showRegistrationFragmentPage();
 
                         } else {
                             errorMsg = getResources().getString(R.string.Invalid_Device_Date_Time);
                             Toast toast = Toast.makeText(getActivity(), errorMsg, Toast.LENGTH_LONG);
-                            CommonUtil.showToast(toast);
+                            CommonUtil.showToast(toast,getActivity());
                             toast.show();
                         }
 
@@ -278,12 +278,12 @@ public class DomainFragment extends Fragment {
                 } catch (JSONException e) {
                     Log.d("RegistrationFragment", e.getMessage());
                     Toast toast = Toast.makeText(getActivity(), getResources().getString(R.string.Some_error_enter_domain), Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,getActivity());
                     toast.show();
                 }
             } else {
                 Toast toast = Toast.makeText(getActivity(), (errorMsg != null) ? errorMsg : getResources().getString(R.string.Some_error_accor_contact_admin), Toast.LENGTH_LONG);
-                CommonUtil.showToast(toast);
+                CommonUtil.showToast(toast,getActivity());
                 toast.show();
             }
             // progressBar.setVisibility(View.GONE);

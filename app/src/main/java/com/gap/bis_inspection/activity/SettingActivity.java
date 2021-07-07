@@ -179,7 +179,7 @@ public class SettingActivity extends AppCompatActivity {
 
                         } else if (!changeLocalPassword.getText().toString().equals(changeLocalPasswordConfirm.getText().toString())) {
                             Toast toast = Toast.makeText(getApplicationContext(), R.string.changeLocal_password_checkConfirm, Toast.LENGTH_SHORT);
-                            CommonUtil.showToast(toast);
+                            CommonUtil.showToast(toast,SettingActivity.this);
                             toast.show();
                         } else {
                             if (user != null) {
@@ -193,7 +193,7 @@ public class SettingActivity extends AppCompatActivity {
                             dialog.dismiss();
 
                             Toast toast = Toast.makeText(getApplicationContext(), R.string.label_SettingActivity_changePassword, Toast.LENGTH_SHORT);
-                            CommonUtil.showToast(toast);
+                            CommonUtil.showToast(toast,SettingActivity.this);
                             toast.show();
                         }
                     }
@@ -246,7 +246,7 @@ public class SettingActivity extends AppCompatActivity {
                             dialog.dismiss();
 
                             Toast toast = Toast.makeText(getApplicationContext(), R.string.label_SettingActivity_changePassword, Toast.LENGTH_SHORT);
-                            CommonUtil.showToast(toast);
+                            CommonUtil.showToast(toast,SettingActivity.this);
                             toast.show();
                         }
                     }
@@ -410,7 +410,7 @@ public class SettingActivity extends AppCompatActivity {
 
                                                             } else {
                                                                 Toast toast = Toast.makeText(getApplicationContext(), R.string.Some_error_accor_contact_admin, Toast.LENGTH_SHORT);
-                                                                CommonUtil.showToast(toast);
+                                                                CommonUtil.showToast(toast,SettingActivity.this);
                                                                 toast.show();
                                                             }
                                                         }
@@ -432,7 +432,7 @@ public class SettingActivity extends AppCompatActivity {
                                                 });
                                             } else {
                                                 Toast toast = Toast.makeText(getApplicationContext(), R.string.result_update_Toast, Toast.LENGTH_SHORT);
-                                                CommonUtil.showToast(toast);
+                                                CommonUtil.showToast(toast,SettingActivity.this);
                                                 toast.show();
                                                 btnDownloadAndUpdate.setVisibility(View.VISIBLE);
                                             }
@@ -447,18 +447,18 @@ public class SettingActivity extends AppCompatActivity {
                             errorMsg = resultJson.getString(Constants.ERROR_KEY);
                         }
                         Toast toast = Toast.makeText(SettingActivity.this, errorMsg, Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,SettingActivity.this);
                         toast.show();
                     }
                 } catch (JSONException e) {
                     Log.d("RegistrationFragment", e.getMessage());
                     Toast toast = Toast.makeText(SettingActivity.this, getResources().getString(R.string.Some_error_accor_contact_admin), Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,SettingActivity.this);
                     toast.show();
                 }
             } else {
                 Toast toast = Toast.makeText(SettingActivity.this, (errorMsg != null) ? errorMsg : getResources().getString(R.string.Some_error_accor_contact_admin), Toast.LENGTH_LONG);
-                CommonUtil.showToast(toast);
+                CommonUtil.showToast(toast,SettingActivity.this);
                 toast.show();
             }
         }

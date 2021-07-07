@@ -211,7 +211,7 @@ public class ActivationFragment extends Fragment {
                             showPasswordCreationPage();
                         } else {
                             Toast toast = Toast.makeText(getActivity(), getResources().getString(R.string.Some_error_accor_contact_admin), Toast.LENGTH_LONG);
-                            CommonUtil.showToast(toast);
+                            CommonUtil.showToast(toast,getActivity());
                             toast.show();
                         }
                     } else {
@@ -219,18 +219,18 @@ public class ActivationFragment extends Fragment {
                             errorMsg = resultJson.getString(Constants.ERROR_KEY);
                         }
                         Toast toast = Toast.makeText(getActivity(), errorMsg, Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,getActivity());
                         toast.show();
                     }
                 } catch (JSONException e) {
                     Log.d("ActivationFragment", e.getMessage());
                     Toast toast = Toast.makeText(getActivity(), getResources().getString(R.string.Some_error_accor_contact_admin), Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,getActivity());
                     toast.show();
                 }
             } else {
                 Toast toast = Toast.makeText(getActivity(), getResources().getString(R.string.Some_error_accor_contact_admin), Toast.LENGTH_LONG);
-                CommonUtil.showToast(toast);
+                CommonUtil.showToast(toast,getActivity());
                 toast.show();
             }
             //progressBar.setVisibility(View.GONE);

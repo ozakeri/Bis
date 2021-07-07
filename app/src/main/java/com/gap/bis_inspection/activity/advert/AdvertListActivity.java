@@ -192,7 +192,7 @@ public class AdvertListActivity extends AppCompatActivity {
                         }
                     } else {
                         Toast toast = Toast.makeText(AdvertListActivity.this, "result is Null", Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,AdvertListActivity.this);
                         toast.show();
                     }
                 }
@@ -305,7 +305,7 @@ public class AdvertListActivity extends AppCompatActivity {
 
                     if (result.length() == 0) {
                         Toast toast = Toast.makeText(AdvertListActivity.this, "تبلیغات یافت نشد", Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,AdvertListActivity.this);
                         toast.show();
                         return;
                     }
@@ -316,12 +316,12 @@ public class AdvertListActivity extends AppCompatActivity {
                         startActivity(intent);
                     } else {
                         Toast toast = Toast.makeText(AdvertListActivity.this, "تبلیغات یافت نشد", Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,AdvertListActivity.this);
                         toast.show();
                     }
                 } else {
                     Toast toast = Toast.makeText(AdvertListActivity.this, "تبلیغات یافت نشد", Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,AdvertListActivity.this);
                     toast.show();
                 }
 

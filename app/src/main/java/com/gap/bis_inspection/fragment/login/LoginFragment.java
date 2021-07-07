@@ -95,7 +95,7 @@ public class LoginFragment extends Fragment {
             public void onClick(View view) {
                 if (passwordEditText.getText().length() == 0) {
                     Toast toast = Toast.makeText(getActivity(), R.string.label_reportStrTv_NotNull, Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,getActivity());
                     toast.show();
                 } else {
                     passwordEditText = CommonUtil.farsiNumberReplacement(passwordEditText);
@@ -161,12 +161,12 @@ public class LoginFragment extends Fragment {
                 showHomePage();
             } else {
                 Toast toast = Toast.makeText(getActivity(), R.string.label_login_toast, Toast.LENGTH_LONG);
-                CommonUtil.showToast(toast);
+                CommonUtil.showToast(toast,getActivity());
                 toast.show();
             }
         } else {
             Toast toast = Toast.makeText(getActivity(), R.string.Invalid_Device_Date_Time, Toast.LENGTH_LONG);
-            CommonUtil.showToast(toast);
+            CommonUtil.showToast(toast,getActivity());
             toast.show();
         }
     }

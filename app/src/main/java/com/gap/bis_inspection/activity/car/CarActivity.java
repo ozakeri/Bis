@@ -319,18 +319,18 @@ public class CarActivity extends AppCompatActivity {
                             errorMsg = resultJson.getString(Constants.ERROR_KEY);
                         }
                         Toast toast = Toast.makeText(context, errorMsg, Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,CarActivity.this);
                         toast.show();
                     }
                 } catch (JSONException e) {
                     Log.d("RegistrationFragment", e.getMessage());
                     Toast toast = Toast.makeText(context, getResources().getString(R.string.Some_error_accor_contact_admin), Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,CarActivity.this);
                     toast.show();
                 }
             } else {
                 Toast toast = Toast.makeText(context, (errorMsg != null) ? errorMsg : getResources().getString(R.string.Some_error_accor_contact_admin), Toast.LENGTH_LONG);
-                CommonUtil.showToast(toast);
+                CommonUtil.showToast(toast,CarActivity.this);
                 toast.show();
             }
         }

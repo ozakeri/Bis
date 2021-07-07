@@ -278,18 +278,18 @@ public class CarDriverDetailActivity extends AppCompatActivity {
                             errorMsg = resultJson.getString(Constants.ERROR_KEY);
                         }
                         Toast toast = Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,CarDriverDetailActivity.this);
                         toast.show();
                     }
                 } catch (JSONException e) {
                     Log.d("RegistrationFragment", e.getMessage());
                     Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.Some_error_accor_contact_admin), Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,CarDriverDetailActivity.this);
                     toast.show();
                 }
             } else {
                 Toast toast = Toast.makeText(getApplicationContext(), (errorMsg != null) ? errorMsg : getResources().getString(R.string.Some_error_accor_contact_admin), Toast.LENGTH_LONG);
-                CommonUtil.showToast(toast);
+                CommonUtil.showToast(toast,CarDriverDetailActivity.this);
                 toast.show();
             }
         }

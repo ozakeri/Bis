@@ -132,13 +132,13 @@ public class DriverActivity extends AppCompatActivity {
 
                 if ((searchType.equals("driverCode") && txt_search.getText().length() == 0)) {
                     Toast toast = Toast.makeText(getApplicationContext(), R.string.label_reportStrTv_NotNull, Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,DriverActivity.this);
                     toast.show();
                     return;
                 }
                 if (searchType.equals("driverName") && (txt_name.getText().toString().trim().length() == 0 || txt_family.getText().toString().trim().length() == 0)) {
                     Toast toast = Toast.makeText(getApplicationContext(), R.string.label_reportStrTv_NotNull, Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,DriverActivity.this);
                     toast.show();
                     return;
                 }
@@ -237,7 +237,7 @@ public class DriverActivity extends AppCompatActivity {
 
                 } else if (resultCode == RESULT_CANCELED) {
                     Toast toast = Toast.makeText(this, "Scan was Cancelled!", Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,DriverActivity.this);
                     toast.show();
                 }
             }
@@ -305,18 +305,18 @@ public class DriverActivity extends AppCompatActivity {
                             errorMsg = resultJson.getString(Constants.ERROR_KEY);
                         }
                         Toast toast = Toast.makeText(context, errorMsg, Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,DriverActivity.this);
                         toast.show();
                     }
                 } catch (JSONException e) {
                     Log.d("RegistrationFragment", e.getMessage());
                     Toast toast = Toast.makeText(context, getResources().getString(R.string.Some_error_accor_contact_admin), Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,DriverActivity.this);
                     toast.show();
                 }
             } else {
                 Toast toast = Toast.makeText(context, (errorMsg != null) ? errorMsg : getResources().getString(R.string.Some_error_accor_contact_admin), Toast.LENGTH_LONG);
-                CommonUtil.showToast(toast);
+                CommonUtil.showToast(toast,DriverActivity.this);
                 toast.show();
             }
         }
@@ -465,7 +465,7 @@ public class DriverActivity extends AppCompatActivity {
                             errorMsg = resultJson.getString(Constants.ERROR_KEY);
                         }
                         Toast toast = Toast.makeText(context, errorMsg, Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,DriverActivity.this);
                         toast.show();
                     }
                 } catch (JSONException e) {
@@ -473,7 +473,7 @@ public class DriverActivity extends AppCompatActivity {
                 }
             } else {
                 Toast toast = Toast.makeText(context, (errorMsg != null) ? errorMsg : "222222222222222222", Toast.LENGTH_LONG);
-                CommonUtil.showToast(toast);
+                CommonUtil.showToast(toast,DriverActivity.this);
                 toast.show();
             }
         }

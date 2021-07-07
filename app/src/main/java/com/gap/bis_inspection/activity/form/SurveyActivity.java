@@ -193,7 +193,7 @@ public class SurveyActivity extends AppCompatActivity {
                     surveyForm.setYLongitude(longitude != null ? longitude.toString() : null);
                     coreService.updateSurveyForm(surveyForm);
                     Toast toast = Toast.makeText(getApplicationContext(), R.string.label_record_form, Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,SurveyActivity.this);
                     toast.show();
                 }
             }
@@ -233,7 +233,7 @@ public class SurveyActivity extends AppCompatActivity {
                             Intent intent = new Intent(getApplicationContext(), SurveyListActivity.class);
                             startActivity(intent);
                             Toast toast = Toast.makeText(getApplicationContext(), R.string.label_complete_form, Toast.LENGTH_LONG);
-                            CommonUtil.showToast(toast);
+                            CommonUtil.showToast(toast,SurveyActivity.this);
                             toast.show();
                             dialog.dismiss();
                         }
@@ -264,7 +264,7 @@ public class SurveyActivity extends AppCompatActivity {
 
                 if (attachFileRecyclerView.getAdapter().getItemCount() == 4) {
                     Toast toast = Toast.makeText(getApplicationContext(), R.string.label_fullAttach_checkList, Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,SurveyActivity.this);
                     toast.show();
                 } else {
 

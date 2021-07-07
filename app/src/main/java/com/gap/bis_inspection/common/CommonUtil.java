@@ -6,9 +6,9 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import com.google.android.material.snackbar.Snackbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gap.bis_inspection.R;
+import com.gap.bis_inspection.app.AppController;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -32,7 +34,7 @@ import java.util.Locale;
  */
 public class CommonUtil<T> {
 
-    private static String[] persianNumbers = new String[]{ "۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹" };
+    private static String[] persianNumbers = new String[]{"۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"};
 
     public static List<Data> getMonthDataList(Context context) {
         final List<Data> monthDataList = new ArrayList<Data>();
@@ -87,16 +89,16 @@ public class CommonUtil<T> {
     }
 
     public static String farsiNumberReplacement(String text) {
-            text = text.replaceAll("۰", "0");
-            text = text.replaceAll("۱", "1");
-            text = text.replaceAll("۲", "2");
-            text = text.replaceAll("۳", "3");
-            text = text.replaceAll("۴", "4");
-            text = text.replaceAll("۵", "5");
-            text = text.replaceAll("۶", "6");
-            text = text.replaceAll("۷", "7");
-            text = text.replaceAll("۸", "8");
-            text = text.replaceAll("۹", "9");
+        text = text.replaceAll("۰", "0");
+        text = text.replaceAll("۱", "1");
+        text = text.replaceAll("۲", "2");
+        text = text.replaceAll("۳", "3");
+        text = text.replaceAll("۴", "4");
+        text = text.replaceAll("۵", "5");
+        text = text.replaceAll("۶", "6");
+        text = text.replaceAll("۷", "7");
+        text = text.replaceAll("۸", "8");
+        text = text.replaceAll("۹", "9");
 
         return text;
     }
@@ -131,6 +133,21 @@ public class CommonUtil<T> {
         messageTextView.setTypeface(typeface);
         //messageTextView.getResources().getColor(R.color.mdtp_transparent_black);
         group.setBackgroundResource(R.drawable.textview_toast_style);
+        return toast;
+    }
+
+    @SuppressLint("ResourceAsColor")
+    public static Toast showToast(Toast toast, Context context) {
+        Typeface typeface = Typeface.create("BYekan.ttf", Typeface.BOLD);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+
+        View view = LayoutInflater.from(context)
+                .inflate(R.layout.toast_layout, null);
+
+        TextView messageTextView = view.findViewById(R.id.tvMessage);
+        messageTextView.setTextSize(15);
+        messageTextView.setTextColor(R.color.mdtp_light_gray);
+        messageTextView.setTypeface(typeface);
         return toast;
     }
 
@@ -190,8 +207,9 @@ public class CommonUtil<T> {
 
 
     public static String doubleToStringNoDecimal(double d) {
-        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);;
-        formatter .applyPattern("#,###");
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        ;
+        formatter.applyPattern("#,###");
         return formatter.format(d);
     }
 

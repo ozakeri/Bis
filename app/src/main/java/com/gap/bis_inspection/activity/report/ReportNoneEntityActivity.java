@@ -898,7 +898,7 @@ public class ReportNoneEntityActivity extends AppCompatActivity {
             new Thread(new SaveComplaintReportTask()).start();
             finish();
             Toast toast = Toast.makeText(getApplicationContext(), R.string.label_report_sendMsg, Toast.LENGTH_LONG);
-            CommonUtil.showToast(toast);
+            CommonUtil.showToast(toast,ReportNoneEntityActivity.this);
             toast.show();
         }
     }
@@ -949,18 +949,18 @@ public class ReportNoneEntityActivity extends AppCompatActivity {
                             errorMsg = resultJson.getString(Constants.ERROR_KEY);
                         }
                         Toast toast = Toast.makeText(context, errorMsg, Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,ReportNoneEntityActivity.this);
                         toast.show();
                     }
                 } catch (JSONException e) {
                     Log.d("RegistrationFragment", e.getMessage());
                     Toast toast = Toast.makeText(context, getResources().getString(R.string.Some_error_accor_contact_admin), Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,ReportNoneEntityActivity.this);
                     toast.show();
                 }
             } else {
                 Toast toast = Toast.makeText(context, (errorMsg != null) ? errorMsg : getResources().getString(R.string.Some_error_accor_contact_admin), Toast.LENGTH_LONG);
-                CommonUtil.showToast(toast);
+                CommonUtil.showToast(toast,ReportNoneEntityActivity.this);
                 toast.show();
             }
         }
@@ -1065,18 +1065,18 @@ public class ReportNoneEntityActivity extends AppCompatActivity {
                             errorMsg = resultJson.getString(Constants.ERROR_KEY);
                         }
                         Toast toast = Toast.makeText(context, errorMsg, Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,ReportNoneEntityActivity.this);
                         toast.show();
                     }
                 } catch (JSONException e) {
                     Log.d("RegistrationFragment", e.getMessage());
                     Toast toast = Toast.makeText(context, getResources().getString(R.string.Some_error_accor_contact_admin), Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,ReportNoneEntityActivity.this);
                     toast.show();
                 }
             } else {
                 Toast toast = Toast.makeText(context, (errorMsg != null) ? errorMsg : getResources().getString(R.string.Some_error_accor_contact_admin), Toast.LENGTH_LONG);
-                CommonUtil.showToast(toast);
+                CommonUtil.showToast(toast,ReportNoneEntityActivity.this);
                 toast.show();
             }
         }
@@ -1181,18 +1181,18 @@ public class ReportNoneEntityActivity extends AppCompatActivity {
                             errorMsg = resultJson.getString(Constants.ERROR_KEY);
                         }
                         Toast toast = Toast.makeText(context, errorMsg, Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,ReportNoneEntityActivity.this);
                         toast.show();
                     }
                 } catch (JSONException e) {
                     Log.d("RegistrationFragment", e.getMessage());
                     Toast toast = Toast.makeText(context, getResources().getString(R.string.Some_error_accor_contact_admin), Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,ReportNoneEntityActivity.this);
                     toast.show();
                 }
             } else {
                 Toast toast = Toast.makeText(context, (errorMsg != null) ? errorMsg : getResources().getString(R.string.Some_error_accor_contact_admin), Toast.LENGTH_LONG);
-                CommonUtil.showToast(toast);
+                CommonUtil.showToast(toast,ReportNoneEntityActivity.this);
                 toast.show();
             }
         }

@@ -313,7 +313,7 @@ public class EditAdvertActivity extends AppCompatActivity {
 
                 if (attachFileIdList.size() == maxRecord) {
                     Toast toast = Toast.makeText(EditAdvertActivity.this, "تعداد ثبت پیوست محدود است", Toast.LENGTH_SHORT);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,EditAdvertActivity.this);
                     toast.show();
                 } else {
                     showAttachDialog();
@@ -546,7 +546,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                                         if (Integer.parseInt(attachFileSettingMinRecord.get(i)) != jsonObj.getInt("max")) {
                                             if (loopCount == attachFileSettingListName.size()) {
                                                 Toast toast = Toast.makeText(EditAdvertActivity.this, "افزودن پیوست " + " " + attachFileSettingListName.get(i) + " ضروری است ", Toast.LENGTH_LONG);
-                                                CommonUtil.showToast(toast);
+                                                CommonUtil.showToast(toast,EditAdvertActivity.this);
                                                 toast.show();
                                             }
                                         }
@@ -665,7 +665,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                             if (!processBisDataVO.isNull("id")) {
                                 ProcessBisDataVOId = processBisDataVO.getString("id");
                                 Toast toast = Toast.makeText(EditAdvertActivity.this, "درخواست انجام شد", Toast.LENGTH_LONG);
-                                CommonUtil.showToast(toast);
+                                CommonUtil.showToast(toast,EditAdvertActivity.this);
                                 toast.show();
                                 globalDomain.setOnRestart(true);
                                 // finish();
@@ -1337,7 +1337,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                         }
                     } else {
                         Toast toast = Toast.makeText(EditAdvertActivity.this, "خطا در عملیات", Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,EditAdvertActivity.this);
                         toast.show();
                     }
                 } catch (JSONException e) {
@@ -1457,7 +1457,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                         }
                     } else {
                         Toast toast = Toast.makeText(EditAdvertActivity.this, "خطا در عملیات", Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast);
+                        CommonUtil.showToast(toast,EditAdvertActivity.this);
                         toast.show();
                     }
                 } catch (JSONException e) {

@@ -173,7 +173,7 @@ public class ConfirmFragment extends Fragment {
                                 errorMsg = resultJson.getString(Constants.ERROR_KEY);
                             }
                             Toast toast = Toast.makeText(getActivity(), errorMsg, Toast.LENGTH_LONG);
-                            CommonUtil.showToast(toast);
+                            CommonUtil.showToast(toast,getActivity());
                             toast.show();
                         }
                     } catch (JSONException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
@@ -182,7 +182,7 @@ public class ConfirmFragment extends Fragment {
                 }
             } else {
                 Toast toast = Toast.makeText(getActivity(), errorMsg, Toast.LENGTH_LONG);
-                CommonUtil.showToast(toast);
+                CommonUtil.showToast(toast,getActivity());
                 toast.show();
             }
         }

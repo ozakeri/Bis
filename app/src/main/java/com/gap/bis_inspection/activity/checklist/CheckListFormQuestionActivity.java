@@ -304,13 +304,13 @@ public class CheckListFormQuestionActivity extends AppCompatActivity {
                     //saveSurveyFormQuestion();
                     //updateSurveyFormQuestion();
                     Toast toast = Toast.makeText(getApplicationContext(), R.string.label_record_form, Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,CheckListFormQuestionActivity.this);
                     toast.show();
                     finish();
                 } else {
                     updateSurveyFormQuestion();
                     Toast toast = Toast.makeText(getApplicationContext(), R.string.label_record_form, Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,CheckListFormQuestionActivity.this);
                     toast.show();
                 }
 
@@ -346,7 +346,7 @@ public class CheckListFormQuestionActivity extends AppCompatActivity {
                             recognize = false;
                             finish();
                             Toast toast = Toast.makeText(getApplicationContext(), R.string.label_record_form, Toast.LENGTH_LONG);
-                            CommonUtil.showToast(toast);
+                            CommonUtil.showToast(toast,CheckListFormQuestionActivity.this);
                             toast.show();
 
                         } else {
@@ -365,7 +365,7 @@ public class CheckListFormQuestionActivity extends AppCompatActivity {
                             new Thread(new SaveCheckFormTask()).start();
                             finish();
                             Toast toast = Toast.makeText(getApplicationContext(), R.string.label_complete_form, Toast.LENGTH_LONG);
-                            CommonUtil.showToast(toast);
+                            CommonUtil.showToast(toast,CheckListFormQuestionActivity.this);
                             toast.show();
                         }
                         dialog.dismiss();
@@ -396,7 +396,7 @@ public class CheckListFormQuestionActivity extends AppCompatActivity {
 
                 if (attachFileRecyclerView.getAdapter().getItemCount() == 4) {
                     Toast toast = Toast.makeText(getApplicationContext(), R.string.label_fullAttach_checkList, Toast.LENGTH_LONG);
-                    CommonUtil.showToast(toast);
+                    CommonUtil.showToast(toast,CheckListFormQuestionActivity.this);
                     toast.show();
                 } else {
 
