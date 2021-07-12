@@ -68,6 +68,18 @@
         android:background="@android:color/black" />
 
     <com.gap.bis_inspection.util.CustomTextView
+        android:id="@+id/description_locate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="16sp"
+        android:textColor="@color/fav"
+        android:text="zCZXCzXcZXczXczXCzXCXCVZXCds"
+        android:visibility="gone"/>
+
+    <com.gap.bis_inspection.util.CustomTextView
         android:id="@+id/gallery_VT"
         android:layout_width="fill_parent"
         android:layout_height="50dp"

@@ -113,6 +113,7 @@ public class SearchAdvertActivity extends AppCompatActivity {
     private GlobalDomain globalDomain = GlobalDomain.getInstance();
     private int actionProcessStatus;
     private AppController application;
+    private boolean processStatusIsValidForEdit = false;
 
 
     @Override
@@ -207,7 +208,7 @@ public class SearchAdvertActivity extends AppCompatActivity {
                 String processBisDataParamValue = "";
                 String id = null, description = null, permissionId = null, permissionName = null,conf2Permission = null;
                 int processStatus = 0;
-                boolean processStatusIsValidForEdit = false;
+
                 boolean haveAttachment = false, conf2Req = false;
 
                 try {

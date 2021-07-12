@@ -124,6 +124,10 @@ public class AdvertAdapter extends RecyclerView.Adapter<AdvertAdapter.CustomView
                 holder.txt_date.setText(CommonUtil.latinNumberToPersian(hejriStartDate));
             }
 
+            System.out.println("processStatusIsValidForEdit====" + processStatusIsValidForEdit);
+            System.out.println("processStatus====" + processStatus);
+            System.out.println("getPermissionMap====" + application.getPermissionMap().containsKey(appPermission));
+
             if (processStatusIsValidForEdit && processStatus == 0 && application.getPermissionMap().containsKey(appPermission)) {
                 holder.img_edit.setVisibility(View.VISIBLE);
             } else {

@@ -306,11 +306,6 @@ public class EditAdvertActivity extends AppCompatActivity {
         img_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                System.out.println("setOnClickListener=====" + attachFileIdList.size());
-                System.out.println("maxRecord=====" + maxRecord);
-                System.out.println("attachFileSettingId=====" + attachFileSettingId);
-
                 if (attachFileIdList.size() == maxRecord) {
                     Toast toast = Toast.makeText(EditAdvertActivity.this, "تعداد ثبت پیوست محدود است", Toast.LENGTH_SHORT);
                     CommonUtil.showToast(toast,EditAdvertActivity.this);
@@ -497,6 +492,7 @@ public class EditAdvertActivity extends AppCompatActivity {
             private String result;
             private String errorMsg;
             private ProgressDialog progressDialog = null;
+            private int id;
 
             @SuppressLint("StringFormatInvalid")
             @Override
@@ -534,6 +530,12 @@ public class EditAdvertActivity extends AppCompatActivity {
                         if (errorMsg == null && !jsonObjRes.isNull(Constants.SUCCESS_KEY)) {
                             if (!jsonObjRes.isNull(Constants.RESULT_KEY)) {
                                 JSONObject jsonObj = jsonObjRes.getJSONObject(Constants.RESULT_KEY);
+                                if (!jsonObj.isNull("id")) {
+                                    id = jsonObj.getInt("id");
+                                    if (attachFileSettingId.equals("73") || attachFileSettingId.equals("75") || attachFileSettingId.equals("74")){
+                                        minRecord = 4;
+                                    }
+                                }
                                 if (!jsonObj.isNull("max")) {
                                     max += jsonObj.getInt("max");
                                     //maxRecord = Integer.parseInt(attachFileSettingMaxrecord.get(i));
@@ -884,9 +886,37 @@ public class EditAdvertActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.dialog_attach_checklist);
         TextView camera = (TextView) dialog.findViewById(R.id.camera_VT);
         TextView gallery = (TextView) dialog.findViewById(R.id.gallery_VT);
+        TextView description_locate = (TextView) dialog.findViewById(R.id.description_locate);
         gallery.setVisibility(View.GONE);
+
         RelativeLayout closeIcon = (RelativeLayout) dialog.findViewById(R.id.closeIcon);
         dialog.show();
+
+
+        System.out.println("attachFileSettingId=====" + attachFileSettingId);
+        System.out.println("maxRecord=====" + maxRecord);
+
+        if (attachFileSettingId.equals("73") || attachFileSettingId.equals("75") || attachFileSettingId.equals("74")){
+            description_locate.setVisibility(View.VISIBLE);
+        }
+
+        switch (attachFileIdList.size()){
+            case 0:
+                description_locate.setText("تصویر جلوی خودرو");
+                break;
+
+            case 1:
+                description_locate.setText("تصویر بدنه سمت راست خودرو");
+                break;
+
+            case 2:
+                description_locate.setText("تصویر عقب خودرو");
+                break;
+
+            case 3:
+                description_locate.setText("تصویر بدنه سمت چپ خودرو");
+                break;
+        }
 
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
