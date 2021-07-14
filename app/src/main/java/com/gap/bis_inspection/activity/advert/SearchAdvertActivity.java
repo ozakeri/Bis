@@ -273,7 +273,7 @@ public class SearchAdvertActivity extends AppCompatActivity {
                             processStatusIsValidForEdit = jsonDate.getBoolean("processStatusIsValidForEdit");
                         }
 
-                        if (processStatusIsValidForEdit && processStatus == 0) {
+                       // if (processStatusIsValidForEdit && processStatus == 0) {
                             Intent intent = new Intent(SearchAdvertActivity.this, EditAdvertActivity.class);
                             intent.putExtra("id", id);
                             intent.putExtra("description", description);
@@ -288,8 +288,9 @@ public class SearchAdvertActivity extends AppCompatActivity {
                             intent.putExtra("conf2Permission", conf2Permission);
                             intent.putExtra("actionProcessStatus", actionProcessStatus);
                             intent.putExtra("advertisementId", advertisementId);
+                            intent.putExtra("processStatusIsValidForEdit", processStatusIsValidForEdit);
                             startActivity(intent);
-                        }
+                       // }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -76,7 +76,6 @@
         android:layout_marginBottom="10dp"
         android:textSize="16sp"
         android:textColor="@color/fav"
-        android:text="zCZXCzXcZXczXczXCzXCXCVZXCds"
         android:visibility="gone"/>
 
     <com.gap.bis_inspection.util.CustomTextView

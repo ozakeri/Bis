@@ -12,6 +12,8 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -80,6 +82,8 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
@@ -114,7 +118,7 @@ public class EditAdvertActivity extends AppCompatActivity {
     private JSONArray attachFileJsonArrayJsonObject;
     private JSONArray jsonArrayAttachJsonObject;
     private GlobalDomain globalDomain = GlobalDomain.getInstance();
-    private boolean allowed = false, confirm = false, nonConfirm = false, conf2Req = false, isEdit = false, haveAttachment = false;
+    private boolean allowed = false, confirm = false, nonConfirm = false, conf2Req = false, isEdit = false, haveAttachment = false, processStatusIsValidForEdit = false;
     private AppController application;
     private List<String> attachFileSettingListId;
     private List<String> attachFileSettingListName;
@@ -177,6 +181,7 @@ public class EditAdvertActivity extends AppCompatActivity {
             actionProcessStatus = getIntent().getExtras().getInt("actionProcessStatus");
             advertisementDetailId = getIntent().getExtras().getString("advertisementDetailId");
             conf2Req = getIntent().getExtras().getBoolean("conf2Req");
+            processStatusIsValidForEdit = getIntent().getExtras().getBoolean("processStatusIsValidForEdit");
 
             img_add.setVisibility(View.INVISIBLE);
             spinner.setVisibility(View.INVISIBLE);
@@ -209,7 +214,15 @@ public class EditAdvertActivity extends AppCompatActivity {
                 txt_processName.setText(processBisSettingName);
                 edt_description.setText(description);
                 btn_nonConfirm.setVisibility(View.GONE);
-                //new GetAttachFileList().execute();
+
+                if (!processStatusIsValidForEdit) {
+                    btn_edit.setVisibility(View.GONE);
+                    btn_confirm.setVisibility(View.GONE);
+                    btn_nonConfirm.setVisibility(View.GONE);
+                    img_add.setVisibility(View.GONE);
+                    edt_description.setEnabled(false);
+                }
+
             } else {
                 btn_confirm.setVisibility(View.GONE);
                 btn_nonConfirm.setVisibility(View.GONE);
@@ -232,7 +245,15 @@ public class EditAdvertActivity extends AppCompatActivity {
                 @Override
                 public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
 
-                    minRecord = Integer.parseInt(attachFileSettingMinRecord.get(position));
+
+                    if (attachFileSettingId.equals("73") || attachFileSettingId.equals("75") || attachFileSettingId.equals("74")) {
+                        minRecord = 4;
+                    } else {
+                        minRecord = Integer.parseInt(attachFileSettingMinRecord.get(position));
+                    }
+
+                    System.out.println("minRecord=====" + minRecord);
+
                     maxRecord = Integer.parseInt(attachFileSettingMaxrecord.get(position));
                     maxRecordCopy = Integer.parseInt(attachFileSettingMaxrecord.get(position));
 
@@ -274,6 +295,10 @@ public class EditAdvertActivity extends AppCompatActivity {
             btn_edit.setVisibility(View.GONE);
         }
 
+
+        System.out.println("processStatusIsValidForEdit====" + processStatusIsValidForEdit);
+        System.out.println("processStatus====" + processStatus);
+
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -308,7 +333,7 @@ public class EditAdvertActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (attachFileIdList.size() == maxRecord) {
                     Toast toast = Toast.makeText(EditAdvertActivity.this, "تعداد ثبت پیوست محدود است", Toast.LENGTH_SHORT);
-                    CommonUtil.showToast(toast,EditAdvertActivity.this);
+                    CommonUtil.showToast(toast, EditAdvertActivity.this);
                     toast.show();
                 } else {
                     showAttachDialog();
@@ -530,34 +555,28 @@ public class EditAdvertActivity extends AppCompatActivity {
                         if (errorMsg == null && !jsonObjRes.isNull(Constants.SUCCESS_KEY)) {
                             if (!jsonObjRes.isNull(Constants.RESULT_KEY)) {
                                 JSONObject jsonObj = jsonObjRes.getJSONObject(Constants.RESULT_KEY);
-                                if (!jsonObj.isNull("id")) {
-                                    id = jsonObj.getInt("id");
-                                    if (attachFileSettingId.equals("73") || attachFileSettingId.equals("75") || attachFileSettingId.equals("74")){
-                                        minRecord = 4;
-                                    }
-                                }
                                 if (!jsonObj.isNull("max")) {
                                     max += jsonObj.getInt("max");
                                     //maxRecord = Integer.parseInt(attachFileSettingMaxrecord.get(i));
-
-                                    System.out.println("max22=======" + max);
+                                    loopCount++;
+                                    System.out.println("=======max=======" + max);
                                     System.out.println("attachFileSettingMaxrecord=======" + Integer.parseInt(attachFileSettingMaxrecord.get(i)));
                                     System.out.println("minRecord=======" + minRecord);
+                                    System.out.println("loopCount=======" + loopCount);
+                                    System.out.println("size=======" + attachFileSettingListName.size());
 
                                     if (max < minRecord) {
-                                        if (Integer.parseInt(attachFileSettingMinRecord.get(i)) != jsonObj.getInt("max")) {
+                                       // if (Integer.parseInt(attachFileSettingMinRecord.get(i)) != jsonObj.getInt("max")) {
                                             if (loopCount == attachFileSettingListName.size()) {
-                                                Toast toast = Toast.makeText(EditAdvertActivity.this, "افزودن پیوست " + " " + attachFileSettingListName.get(i) + " ضروری است ", Toast.LENGTH_LONG);
-                                                CommonUtil.showToast(toast,EditAdvertActivity.this);
+                                               // Toast toast = Toast.makeText(EditAdvertActivity.this, "افزودن پیوست " + " " + attachFileSettingListName.get(i) + " ضروری است ", Toast.LENGTH_LONG);
+                                                Toast toast = Toast.makeText(EditAdvertActivity.this, " افزودن حداقل تعداد پیوست الزامیست ", Toast.LENGTH_LONG);
+                                                CommonUtil.showToast(toast, EditAdvertActivity.this);
                                                 toast.show();
                                             }
-                                        }
+                                        //}
                                     } else {
                                         EventBus.getDefault().post(new EventBusModel(1));
                                     }
-
-
-
 
                                     /*System.out.println("isMaxCorrect===11====" + isMaxCorrect);
                                     System.out.println("maxRecord====" + maxRecord);
@@ -667,7 +686,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                             if (!processBisDataVO.isNull("id")) {
                                 ProcessBisDataVOId = processBisDataVO.getString("id");
                                 Toast toast = Toast.makeText(EditAdvertActivity.this, "درخواست انجام شد", Toast.LENGTH_LONG);
-                                CommonUtil.showToast(toast,EditAdvertActivity.this);
+                                CommonUtil.showToast(toast, EditAdvertActivity.this);
                                 toast.show();
                                 globalDomain.setOnRestart(true);
                                 // finish();
@@ -896,11 +915,11 @@ public class EditAdvertActivity extends AppCompatActivity {
         System.out.println("attachFileSettingId=====" + attachFileSettingId);
         System.out.println("maxRecord=====" + maxRecord);
 
-        if (attachFileSettingId.equals("73") || attachFileSettingId.equals("75") || attachFileSettingId.equals("74")){
+        if (attachFileSettingId.equals("73") || attachFileSettingId.equals("75") || attachFileSettingId.equals("74")) {
             description_locate.setVisibility(View.VISIBLE);
         }
 
-        switch (attachFileIdList.size()){
+        switch (attachFileIdList.size()) {
             case 0:
                 description_locate.setText("تصویر جلوی خودرو");
                 break;
@@ -1002,7 +1021,26 @@ public class EditAdvertActivity extends AppCompatActivity {
             dir.mkdirs();
         }
         attachFile.setAttachFileLocalPath(filePath);
-        attachFile.setAttachFileUserFileName(userFileName);
+
+        switch (attachFileIdList.size()) {
+            case 0:
+                attachFile.setAttachFileUserFileName(" جلوی خودرو" + userFileName);
+                break;
+
+            case 1:
+                attachFile.setAttachFileUserFileName(" سمت راست خودرو" + userFileName);
+                break;
+
+            case 2:
+                attachFile.setAttachFileUserFileName(" عقب خودرو" + userFileName);
+                break;
+
+            case 3:
+                attachFile.setAttachFileUserFileName(" سمت چپ خودرو" + userFileName);
+                break;
+        }
+
+        //attachFile.setAttachFileUserFileName(userFileName);
         attachFile.setSendingStatusDate(new Date());
         attachFile.setSendingStatusEn(SendingStatusEn.InProgress.ordinal());
         attachFile.setEntityNameEn(EntityNameEn.ProcessBisData.ordinal());
@@ -1213,7 +1251,14 @@ public class EditAdvertActivity extends AppCompatActivity {
                                     attachFileSettingListId.add(attachFileSettingJSONObject.getString("id"));
                                 }
                                 if (!attachFileSettingJSONObject.isNull("attachName") && !attachFileSettingJSONObject.isNull("minRecord")) {
-                                    attachFileSettingListName.add(attachFileSettingJSONObject.getString("attachName") + " - " + " حداقل " + attachFileSettingJSONObject.getString("minRecord") + " پیوست الزامیست ");
+
+                                    attachFileSettingId = attachFileSettingListId.get(i);
+                                    if (attachFileSettingId.equals("73") || attachFileSettingId.equals("75") || attachFileSettingId.equals("74")) {
+                                        attachFileSettingListName.add(attachFileSettingJSONObject.getString("attachName") + " - " + " حداقل 4 پیوست الزامیست ");
+                                    } else {
+                                        attachFileSettingListName.add(attachFileSettingJSONObject.getString("attachName") + " - " + " حداقل " + attachFileSettingJSONObject.getString("minRecord") + " پیوست الزامیست ");
+                                    }
+
                                     spinner.setItems(attachFileSettingListName);
                                 }
 
@@ -1231,7 +1276,14 @@ public class EditAdvertActivity extends AppCompatActivity {
 
                                 new GetAttachFileList().execute();
                                 attachFileSettingId = attachFileSettingListId.get(0);
-                                minRecord = Integer.parseInt(attachFileSettingMinRecord.get(0));
+
+
+                                if (attachFileSettingId.equals("73") || attachFileSettingId.equals("75") || attachFileSettingId.equals("74")) {
+                                    minRecord = 4;
+                                } else {
+                                    minRecord = Integer.parseInt(attachFileSettingMinRecord.get(0));
+                                }
+
                                 maxRecord = Integer.parseInt(attachFileSettingMaxrecord.get(0));
 
                             }
@@ -1304,6 +1356,15 @@ public class EditAdvertActivity extends AppCompatActivity {
             file.createNewFile();
             FileOutputStream outputStream = new FileOutputStream(file);
 
+            Canvas canvas = new Canvas(selectedBitmap);
+            canvas.drawBitmap(selectedBitmap, 0, 0, null);
+            Paint paint = new Paint();
+            paint.setColor(getResources().getColor(R.color.colorAccent));
+            paint.setTextSize(22);
+            // java.util.Timer;
+
+            canvas.drawText("" + "as dkasbdkabsd" + ", " + "alskndasldnaslkndaslfj", 20f ,    25f, paint);
+
             selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
 
             return file;
@@ -1367,7 +1428,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                         }
                     } else {
                         Toast toast = Toast.makeText(EditAdvertActivity.this, "خطا در عملیات", Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast,EditAdvertActivity.this);
+                        CommonUtil.showToast(toast, EditAdvertActivity.this);
                         toast.show();
                     }
                 } catch (JSONException e) {
@@ -1487,7 +1548,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                         }
                     } else {
                         Toast toast = Toast.makeText(EditAdvertActivity.this, "خطا در عملیات", Toast.LENGTH_LONG);
-                        CommonUtil.showToast(toast,EditAdvertActivity.this);
+                        CommonUtil.showToast(toast, EditAdvertActivity.this);
                         toast.show();
                     }
                 } catch (JSONException e) {
@@ -1560,7 +1621,7 @@ public class EditAdvertActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 max = 0;
-                minRecord = 0;
+                // minRecord = 0;
                 maxRecordCopy = 0;
                 loopCount = 0;
                 EventBus.getDefault().post(new EventBusModel(0));
@@ -1576,8 +1637,18 @@ public class EditAdvertActivity extends AppCompatActivity {
 
                 for (int i = 0; i < attachFileSettingListName.size(); i++) {
                     System.out.println("attachFileSettingListName.size()===" + attachFileSettingListName.size());
-                    loopCount++;
-                    minRecord += Integer.parseInt(attachFileSettingMinRecord.get(i));
+
+
+                    String id = attachFileSettingListId.get(i);
+                    System.out.println("id=====" + id);
+                    if (id.equals("73") || id.equals("75") || id.equals("74")) {
+                        minRecord=4;
+                        System.out.println("minRecord11111=====" + minRecord);
+                    }else {
+                        minRecord += Integer.parseInt(attachFileSettingMinRecord.get(i));
+                        System.out.println("minRecord22222=====" + minRecord);
+                    }
+
                     //maxRecord = Integer.parseInt(attachFileSettingMaxrecord.get(i));
                     forceIsEn = attachFileSettingForceIsEn.get(i);
                     attachFileSettingIdCopy = attachFileSettingListId.get(i);
@@ -1607,7 +1678,9 @@ public class EditAdvertActivity extends AppCompatActivity {
         }
 
         if (event.getIsMaxCorrect() == 1) {
-            confirmAdvert(ProcessBisDataVOId, edt_description.getText().toString(), sysParamId, systemParameterStr, dialog);
+
+            System.out.println("========confirmAdvert=========");
+            //confirmAdvert(ProcessBisDataVOId, edt_description.getText().toString(), sysParamId, systemParameterStr, dialog);
         }
     }
 
@@ -1641,9 +1714,9 @@ public class EditAdvertActivity extends AppCompatActivity {
 
     public static String getLocalIpAddress() {
         try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
                 NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
                     InetAddress inetAddress = enumIpAddr.nextElement();
                     if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
                         return inetAddress.getHostAddress();

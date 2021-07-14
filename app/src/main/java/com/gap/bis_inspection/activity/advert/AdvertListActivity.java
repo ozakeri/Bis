@@ -139,7 +139,7 @@ public class AdvertListActivity extends AppCompatActivity {
 
 
     private class GetAdList extends AsyncTask<Void, Void, Void> {
-        private String result;
+        private String result = "";
         private String errorMsg;
         private ProgressDialog progressDialog = null;
 
@@ -170,14 +170,14 @@ public class AdvertListActivity extends AppCompatActivity {
 
             try {
                 System.out.println("======result======" + result);
-                if (result != null){
+                advertisementList = new ArrayList<>();
+                if (result != null && !result.isEmpty()){
                     JSONObject resultJson = new JSONObject(result);
                     if (errorMsg == null && !resultJson.isNull(Constants.SUCCESS_KEY)) {
                         System.out.println("result======" + result);
                         if (!resultJson.isNull(Constants.RESULT_KEY)) {
                             JSONObject jsonObject = resultJson.getJSONObject(Constants.RESULT_KEY);
                             if (!jsonObject.isNull("advertisementList")) {
-                                advertisementList = new ArrayList<>();
                                 JSONArray advertisementListJSONArray = jsonObject.getJSONArray("advertisementList");
 
                                 System.out.println("length=-=-=-=-" + advertisementListJSONArray.length());
@@ -185,9 +185,6 @@ public class AdvertListActivity extends AppCompatActivity {
                                     JSONObject advertisementListJsonObject = (JSONObject) advertisementListJSONArray.get(i);
                                     advertisementList.add(advertisementListJsonObject);
                                 }
-                                AdvertListAdapter adapter = new AdvertListAdapter(advertisementList);
-                                recyclerView.setAdapter(adapter);
-                                txt_count.setText(" تعداد نتایج جستجو: " + CommonUtil.latinNumberToPersian(String.valueOf(advertisementList.size())));
                             }
                         }
                     } else {
@@ -196,6 +193,10 @@ public class AdvertListActivity extends AppCompatActivity {
                         toast.show();
                     }
                 }
+
+                AdvertListAdapter adapter = new AdvertListAdapter(advertisementList);
+                recyclerView.setAdapter(adapter);
+                txt_count.setText(" تعداد نتایج جستجو: " + CommonUtil.latinNumberToPersian(String.valueOf(advertisementList.size())));
 
             } catch (JSONException e) {
                 e.printStackTrace();

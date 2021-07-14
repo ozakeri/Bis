@@ -128,7 +128,7 @@ public class AdvertAdapter extends RecyclerView.Adapter<AdvertAdapter.CustomView
             System.out.println("processStatus====" + processStatus);
             System.out.println("getPermissionMap====" + application.getPermissionMap().containsKey(appPermission));
 
-            if (processStatusIsValidForEdit && processStatus == 0 && application.getPermissionMap().containsKey(appPermission)) {
+            if (processStatusIsValidForEdit) {
                 holder.img_edit.setVisibility(View.VISIBLE);
             } else {
                 holder.img_edit.setVisibility(View.GONE);
