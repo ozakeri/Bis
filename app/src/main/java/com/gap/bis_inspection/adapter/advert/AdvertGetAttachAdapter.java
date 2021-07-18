@@ -7,21 +7,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gap.bis_inspection.R;
-import com.gap.bis_inspection.db.objectmodel.AttachFile;
 
 import java.util.List;
 
 public class AdvertGetAttachAdapter extends RecyclerView.Adapter<AdvertGetAttachAdapter.CustomViewHolder> {
 
     private List<Bitmap> bitmapList = null;
+    private String attachFileSettingId = null;
 
-    public AdvertGetAttachAdapter(List<Bitmap> bitmapList) {
+    public AdvertGetAttachAdapter(List<Bitmap> bitmapList, String attachFileSettingId) {
         this.bitmapList = bitmapList;
+        this.attachFileSettingId = attachFileSettingId;
     }
 
     @NonNull
@@ -38,6 +40,26 @@ public class AdvertGetAttachAdapter extends RecyclerView.Adapter<AdvertGetAttach
             holder.img_attach.setImageBitmap(bitmapList.get(position));
         }
 
+        if (attachFileSettingId.equals("73") || attachFileSettingId.equals("75") || attachFileSettingId.equals("74")) {
+            switch (position) {
+                case 0:
+                    holder.title_txt.setText("جلوی خودرو");
+                    break;
+
+                case 1:
+                    holder.title_txt.setText("سمت راست خودرو");
+                    break;
+
+                case 2:
+                    holder.title_txt.setText("عقب خودرو");
+                    break;
+
+                case 3:
+                    holder.title_txt.setText("سمت چپ خودرو");
+                    break;
+            }
+        }
+
 
     }
 
@@ -50,11 +72,13 @@ public class AdvertGetAttachAdapter extends RecyclerView.Adapter<AdvertGetAttach
 
         private ImageView img_attach;
         private RelativeLayout relativeLayout;
+        private TextView title_txt;
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
             img_attach = itemView.findViewById(R.id.img_attach);
             relativeLayout = itemView.findViewById(R.id.relativeLayout);
+            title_txt = itemView.findViewById(R.id.title_txt);
         }
     }
 

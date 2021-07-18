@@ -514,6 +514,15 @@ public class HomeActivity extends AppCompatActivity {
             System.exit(0);
         }
 
+
+        layoutLine.setVisibility(View.GONE);
+        layoutForm.setVisibility(View.GONE);
+        layoutCheckList.setVisibility(View.GONE);
+        layoutCar.setVisibility(View.GONE);
+        layoutMessage.setVisibility(View.GONE);
+        layoutDriver.setVisibility(View.GONE);
+        layoutReport.setVisibility(View.GONE);
+
     }
 
     public void updateGetCounter() {

@@ -467,7 +467,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                                     attachFileIdList.add(attachFileJsonArrayObject.getString("attachFileId"));
                                 }
 
-                                recyclerViewEditAttach.setAdapter(new AdvertGetAttachAdapter(bitmapArray));
+                                recyclerViewEditAttach.setAdapter(new AdvertGetAttachAdapter(bitmapArray,attachFileSettingId));
                                 txt_attachCount.setText(" تعداد پیوست اضافه شده :  " + CommonUtil.latinNumberToPersian(String.valueOf(bitmapArray.size())));
                             }
                         }
@@ -1007,53 +1007,60 @@ public class EditAdvertActivity extends AppCompatActivity {
     }
 
     public void saveAttachImageFile(String filePath) {
-        File file = new File(String.valueOf(filePath));
-        file = saveBitmapToFile(file);
-        attachFile = new AttachFile();
-        String userFileName = file.getName();
-        long length = file.length();
-        length = length / 1024;
-        System.out.println("File Path : " + file.getPath() + ", File size : " + length + " KB");
-        String filePostfix = userFileName.substring(userFileName.indexOf("."), userFileName.length());
-        String path = Environment.getExternalStorageDirectory().toString() + Constants.DEFAULT_OUT_PUT_DIR + Constants.DEFAULT_IMG_OUT_PUT_DIR;
-        File dir = new File(path);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        attachFile.setAttachFileLocalPath(filePath);
-
-        switch (attachFileIdList.size()) {
-            case 0:
-                attachFile.setAttachFileUserFileName(" جلوی خودرو" + userFileName);
-                break;
-
-            case 1:
-                attachFile.setAttachFileUserFileName(" سمت راست خودرو" + userFileName);
-                break;
-
-            case 2:
-                attachFile.setAttachFileUserFileName(" عقب خودرو" + userFileName);
-                break;
-
-            case 3:
-                attachFile.setAttachFileUserFileName(" سمت چپ خودرو" + userFileName);
-                break;
-        }
-
-        //attachFile.setAttachFileUserFileName(userFileName);
-        attachFile.setSendingStatusDate(new Date());
-        attachFile.setSendingStatusEn(SendingStatusEn.InProgress.ordinal());
-        attachFile.setEntityNameEn(EntityNameEn.ProcessBisData.ordinal());
-        attachFile.setServerAttachFileSettingId(Long.valueOf(attachFileSettingId));
-        attachFile.setEntityId(Long.valueOf(ProcessBisDataVOId));
-        attachFile.setServerEntityId(Long.valueOf(ProcessBisDataVOId));
-        attachFile.setSendingStatusEn(SendingStatusEn.InProgress.ordinal());
-        coreService.insertAttachFile(attachFile);
-
-        System.out.println("attachFile.getId====" + attachFile.getId());
-
-        String newFilePath = path + "/" + attachFile.getId() + filePostfix;
         try {
+
+            File file = new File(String.valueOf(filePath));
+            file = saveBitmapToFile(file);
+            attachFile = new AttachFile();
+            String userFileName = file.getName();
+            long length = file.length();
+            length = length / 1024;
+            System.out.println("File Path : " + file.getPath() + ", File size : " + length + " KB");
+            String filePostfix = userFileName.substring(userFileName.indexOf("."), userFileName.length());
+            String path = Environment.getExternalStorageDirectory().toString() + Constants.DEFAULT_OUT_PUT_DIR + Constants.DEFAULT_IMG_OUT_PUT_DIR;
+            File dir = new File(path);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            attachFile.setAttachFileLocalPath(filePath);
+            if (attachFileSettingId.equals("73") || attachFileSettingId.equals("75") || attachFileSettingId.equals("74")) {
+                switch (attachFileIdList.size()) {
+                    case 0:
+                        attachFile.setAttachFileUserFileName(" (جلوی خودرو) " + userFileName);
+                        break;
+
+                    case 1:
+                        attachFile.setAttachFileUserFileName(" (سمت راست خودرو) " + userFileName);
+                        break;
+
+                    case 2:
+                        attachFile.setAttachFileUserFileName(" (عقب خودرو) " + userFileName);
+                        break;
+
+                    case 3:
+                        attachFile.setAttachFileUserFileName(" (سمت چپ خودرو) " + userFileName);
+                        break;
+                }
+            }else {
+                attachFile.setAttachFileUserFileName(userFileName);
+            }
+
+
+            //attachFile.setAttachFileUserFileName(userFileName);
+            attachFile.setSendingStatusDate(new Date());
+            attachFile.setSendingStatusEn(SendingStatusEn.InProgress.ordinal());
+            attachFile.setEntityNameEn(EntityNameEn.ProcessBisData.ordinal());
+            attachFile.setServerAttachFileSettingId(Long.valueOf(attachFileSettingId));
+            attachFile.setEntityId(Long.valueOf(ProcessBisDataVOId));
+            attachFile.setServerEntityId(Long.valueOf(ProcessBisDataVOId));
+            attachFile.setSendingStatusEn(SendingStatusEn.InProgress.ordinal());
+            coreService.insertAttachFile(attachFile);
+
+            System.out.println("attachFile.getId====" + attachFile.getId());
+
+            String newFilePath = path + "/" + attachFile.getId() + filePostfix;
+
+
             InputStream inputStream = new FileInputStream(file);
             OutputStream outputStream = new FileOutputStream(newFilePath);
             BitmapFactory.Options options = new BitmapFactory.Options();
@@ -1355,15 +1362,6 @@ public class EditAdvertActivity extends AppCompatActivity {
             // here i override the original image file
             file.createNewFile();
             FileOutputStream outputStream = new FileOutputStream(file);
-
-            Canvas canvas = new Canvas(selectedBitmap);
-            canvas.drawBitmap(selectedBitmap, 0, 0, null);
-            Paint paint = new Paint();
-            paint.setColor(getResources().getColor(R.color.colorAccent));
-            paint.setTextSize(22);
-            // java.util.Timer;
-
-            canvas.drawText("" + "as dkasbdkabsd" + ", " + "alskndasldnaslkndaslfj", 20f ,    25f, paint);
 
             selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
 
@@ -1680,7 +1678,7 @@ public class EditAdvertActivity extends AppCompatActivity {
         if (event.getIsMaxCorrect() == 1) {
 
             System.out.println("========confirmAdvert=========");
-            //confirmAdvert(ProcessBisDataVOId, edt_description.getText().toString(), sysParamId, systemParameterStr, dialog);
+            confirmAdvert(ProcessBisDataVOId, edt_description.getText().toString(), sysParamId, systemParameterStr, dialog);
         }
     }
 
