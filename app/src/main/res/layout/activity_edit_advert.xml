@@ -251,7 +251,7 @@
             android:text="ویرایش"
             android:textColor="@color/white"
             android:layout_margin="20dp"
-            android:layout_below="@+id/txt_attachCount"
+            android:layout_below="@+id/recyclerViewEditAttach"
             android:layout_alignParentLeft="true"
             android:background="@color/fav"/>
 
@@ -260,7 +260,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_below="@+id/txt_attachCount"
+            android:layout_below="@+id/recyclerViewEditAttach"
             android:layout_alignParentRight="true">
 
             <androidx.appcompat.widget.AppCompatButton
@@ -296,12 +296,22 @@
 
         <com.jaredrummler.materialspinner.MaterialSpinner
             android:id="@+id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
             android:textColor="@color/black"
             android:layout_margin="5dp"
             android:layout_toLeftOf="@+id/img_add"
             android:layout_below="@+id/edt_description"/>
+
+        <com.gap.bis_inspection.util.CustomTextView
+            android:id="@+id/txt_attachCount"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_below="@+id/edt_description"
+            android:layout_toLeftOf="@+id/spinner"
+            android:textColor="@color/fav"
+            android:gravity="center"
+            android:layout_margin="5dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewEditAttach"
@@ -310,14 +320,6 @@
             android:layout_below="@+id/spinner"
             android:layout_marginTop="5dp"/>
 
-        <com.gap.bis_inspection.util.CustomTextView
-            android:id="@+id/txt_attachCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/recyclerViewEditAttach"
-            android:layout_alignParentEnd="true"
-            android:textColor="@color/fav"
-            android:layout_margin="5dp"/>
 
     </RelativeLayout>
 

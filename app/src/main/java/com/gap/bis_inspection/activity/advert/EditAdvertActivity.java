@@ -231,7 +231,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                     btn_edit.setVisibility(View.GONE);
                     btn_confirm.setVisibility(View.GONE);
                     btn_nonConfirm.setVisibility(View.GONE);
-                    img_add.setVisibility(View.GONE);
+                    img_add.setVisibility(View.INVISIBLE);
                     edt_description.setEnabled(false);
                     txt_title.setText("جزییات");
                     txt_car.setText(car);
@@ -961,7 +961,7 @@ public class EditAdvertActivity extends AppCompatActivity {
     private void showAttachDialog() {
         final Dialog dialog = new Dialog(EditAdvertActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_attach_checklist);
+        dialog.setContentView(R.layout.dialog_attach_advert);
         TextView camera = (TextView) dialog.findViewById(R.id.camera_VT);
         TextView gallery = (TextView) dialog.findViewById(R.id.gallery_VT);
         TextView description_locate = (TextView) dialog.findViewById(R.id.description_locate);
