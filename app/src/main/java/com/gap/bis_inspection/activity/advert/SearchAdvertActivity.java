@@ -272,10 +272,10 @@ public class SearchAdvertActivity extends AppCompatActivity {
                         }
 
                         if (!jsonDate.isNull("startDate")) {
-                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
                             String date = jsonDate.getString("startDate");
                             Date requestDate = simpleDateFormat.parse(date);
-                            startDate = CommonUtil.latinNumberToPersian(HejriUtil.chrisToHejri(requestDate));
+                            startDate = date;
                         }
 
                         if (!jsonDate.isNull("processStatusIsValidForEdit")) {
@@ -299,7 +299,7 @@ public class SearchAdvertActivity extends AppCompatActivity {
                             intent.putExtra("processStatusIsValidForEdit", processStatusIsValidForEdit);
                             intent.putExtra("car", txt_car.getText());
                             intent.putExtra("advertName", txt_advertName.getText());
-                            intent.putExtra("requestDate", txt_advert_date.getText().toString());
+                            intent.putExtra("requestDate", requestDateStr);
                             intent.putExtra("startDate", startDate);
                             startActivity(intent);
                        // }
@@ -401,6 +401,7 @@ public class SearchAdvertActivity extends AppCompatActivity {
                                 String date = advertisement.getString("requestDate");
                                 Date requestDate = simpleDateFormat.parse(date);
                                 txt_advert_date.setText(CommonUtil.latinNumberToPersian(HejriUtil.chrisToHejri(requestDate)));
+                                requestDateStr = advertisement.getString("requestDate");
                             }
                         }
 

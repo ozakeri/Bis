@@ -577,7 +577,7 @@ public class HejriUtil {
         hejriUtil.decodeHejriDate(new Date(chrisDate.getTime()));
 //        return (calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND) + " " + (hejriUtil.getYear()) + "/" + (hejriUtil.getMonth() < 10 ? "0" : "") + hejriUtil.getMonth() + "/" + hejriUtil.getDay());
         //return getWithZeroPrefix(calendar.get(Calendar.HOUR_OF_DAY), 2) + ":" + getWithZeroPrefix(calendar.get(Calendar.MINUTE), 2) + ":" + getWithZeroPrefix(calendar.get(Calendar.SECOND), 2) + " " + hejriUtil.getYear() + "/" + getWithZeroPrefix(hejriUtil.getMonth(), 2) + "/" + getWithZeroPrefix(hejriUtil.getDay(), 2);
-        return hejriUtil.getYear() + "/" + getWithZeroPrefix(hejriUtil.getMonth(), 2) + "/" + getWithZeroPrefix(hejriUtil.getDay(), 2) +"\n"+"   ساعت "+ getWithZeroPrefix(calendar.get(Calendar.HOUR_OF_DAY), 2) + ":" + getWithZeroPrefix(calendar.get(Calendar.MINUTE), 2);
+        return hejriUtil.getYear() + "/" + getWithZeroPrefix(hejriUtil.getMonth(), 2) + "/" + getWithZeroPrefix(hejriUtil.getDay(), 2) +"  ساعت  "+ getWithZeroPrefix(calendar.get(Calendar.HOUR_OF_DAY), 2) + ":" + getWithZeroPrefix(calendar.get(Calendar.MINUTE), 2);
     }
 
     public static String chrisToHejriDateTime(java.util.Date chrisDate) {

@@ -236,7 +236,16 @@ public class EditAdvertActivity extends AppCompatActivity {
                     txt_title.setText("جزییات");
                     txt_car.setText(car);
                     txt_advertName.setText(advertName);
-                    txt_requestDate.setText(requestDate);
+
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+                    Date requestDate1 = null;
+                    try {
+                        requestDate1 = simpleDateFormat.parse(requestDate);
+                        System.out.println("====simpleDateFormat2=====" + CommonUtil.latinNumberToPersian(HejriUtil.chrisToHejriDateTime(requestDate1)));
+                        txt_requestDate.setText(CommonUtil.latinNumberToPersian(HejriUtil.chrisToHejriDateTime(requestDate1)));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
                     layout_car.setVisibility(View.VISIBLE);
                     layout_advert.setVisibility(View.VISIBLE);
@@ -247,11 +256,11 @@ public class EditAdvertActivity extends AppCompatActivity {
 
                     System.out.println("====startDate=====" + startDate);
 
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
-                    Date requestDate1 = null;
+                    SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+                    Date dateCreation = null;
                     try {
-                        requestDate1 = simpleDateFormat.parse(startDate);
-                        txt_dateCreation.setText(CommonUtil.latinNumberToPersian(HejriUtil.chrisToHejri(requestDate1)));
+                        dateCreation = simpleDateFormat1.parse(startDate);
+                        txt_dateCreation.setText(CommonUtil.latinNumberToPersian(HejriUtil.chrisToHejriDateTime(dateCreation)));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
