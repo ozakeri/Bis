@@ -104,6 +104,8 @@ public class SearchAdvertActivity extends AppCompatActivity {
     private String advertisementId = "";
     private List<AttachFile> attachFileList;
     private String ProcessBisDataVOId = "";
+    private String startDate = "";
+    private String requestDateStr = "";
     private Dialog dialog;
     private boolean show = false;
     private String propertyCode = null;
@@ -269,10 +271,16 @@ public class SearchAdvertActivity extends AppCompatActivity {
                             description = jsonDate.getString("description");
                         }
 
+                        if (!jsonDate.isNull("startDate")) {
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                            String date = jsonDate.getString("startDate");
+                            Date requestDate = simpleDateFormat.parse(date);
+                            startDate = CommonUtil.latinNumberToPersian(HejriUtil.chrisToHejri(requestDate));
+                        }
+
                         if (!jsonDate.isNull("processStatusIsValidForEdit")) {
                             processStatusIsValidForEdit = jsonDate.getBoolean("processStatusIsValidForEdit");
                         }
-
                        // if (processStatusIsValidForEdit && processStatus == 0) {
                             Intent intent = new Intent(SearchAdvertActivity.this, EditAdvertActivity.class);
                             intent.putExtra("id", id);
@@ -289,10 +297,16 @@ public class SearchAdvertActivity extends AppCompatActivity {
                             intent.putExtra("actionProcessStatus", actionProcessStatus);
                             intent.putExtra("advertisementId", advertisementId);
                             intent.putExtra("processStatusIsValidForEdit", processStatusIsValidForEdit);
+                            intent.putExtra("car", txt_car.getText());
+                            intent.putExtra("advertName", txt_advertName.getText());
+                            intent.putExtra("requestDate", txt_advert_date.getText().toString());
+                            intent.putExtra("startDate", startDate);
                             startActivity(intent);
                        // }
                     }
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
@@ -348,8 +362,8 @@ public class SearchAdvertActivity extends AppCompatActivity {
                         if (!advertisementDetailVOJsonObject.isNull("car")) {
                             JSONObject carJsonObject = advertisementDetailVOJsonObject.getJSONObject("car");
 
-                            if (!carJsonObject.isNull("nameFv")) {
-                                txt_car.setText(carJsonObject.getString("nameFv"));
+                            if (!carJsonObject.isNull("plateText")) {
+                                txt_car.setText(carJsonObject.getString("plateText"));
                             }
 
                             if (!carJsonObject.isNull("propertyCode")) {
@@ -379,6 +393,7 @@ public class SearchAdvertActivity extends AppCompatActivity {
                             txt_status.setText(advertisementDetailVOJsonObject.getString("processStatus_text"));
                         }
 
+
                         if (!advertisementDetailVOJsonObject.isNull("advertisement")) {
                             JSONObject advertisement = advertisementDetailVOJsonObject.getJSONObject("advertisement");
                             if (!advertisement.isNull("requestDate")) {
@@ -387,7 +402,6 @@ public class SearchAdvertActivity extends AppCompatActivity {
                                 Date requestDate = simpleDateFormat.parse(date);
                                 txt_advert_date.setText(CommonUtil.latinNumberToPersian(HejriUtil.chrisToHejri(requestDate)));
                             }
-
                         }
 
                         if (!advertisementDetailVOJsonObject.isNull("processBisSettingVOList")) {

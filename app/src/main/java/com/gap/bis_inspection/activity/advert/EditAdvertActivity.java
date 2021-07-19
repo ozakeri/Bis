@@ -12,8 +12,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -27,6 +25,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -45,9 +44,9 @@ import com.gap.bis_inspection.R;
 import com.gap.bis_inspection.activity.checklist.FullScreenActivity;
 import com.gap.bis_inspection.adapter.advert.AdvertGetAttachAdapter;
 import com.gap.bis_inspection.app.AppController;
-import com.gap.bis_inspection.common.CalendarUtil;
 import com.gap.bis_inspection.common.CommonUtil;
 import com.gap.bis_inspection.common.Constants;
+import com.gap.bis_inspection.common.HejriUtil;
 import com.gap.bis_inspection.db.enumtype.EntityNameEn;
 import com.gap.bis_inspection.db.enumtype.SendingStatusEn;
 import com.gap.bis_inspection.db.manager.DatabaseManager;
@@ -82,7 +81,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -92,11 +91,13 @@ import java.util.List;
 public class EditAdvertActivity extends AppCompatActivity {
 
     private CustomTextView txt_processName, txt_userCreation, txt_dateCreation;
-    private TextView edt_description, txt_title, txt_attachCount;
+    private TextView edt_description, txt_title, txt_attachCount, txt_car, txt_advertName, txt_requestDate, txt_description;
     private Button btn_edit, btn_confirm, btn_nonConfirm;
     private RelativeLayout closeIcon;
     private RecyclerView recyclerViewEditAttach;
-    private String nameFamily, ProcessBisDataVOId = null, conf2Permission = null, permissionName = null, permissionId = null, advertisementDetailId = null, description = null, processBisSettingId = null, processBisSettingVO = null, advertisementId = null, processBisSettingName = null;
+    private String nameFamily, ProcessBisDataVOId = null, conf2Permission = null, permissionName = null, permissionId = null,
+            advertisementDetailId = null, description = null, processBisSettingId = null, processBisSettingVO = null,
+            advertisementId = null, processBisSettingName = null, car = null, advertName = null, requestDate = null, startDate = null;
     private CoreService coreService;
     private DatabaseManager databaseManager;
     private Bitmap bitmap = null;
@@ -118,7 +119,8 @@ public class EditAdvertActivity extends AppCompatActivity {
     private JSONArray attachFileJsonArrayJsonObject;
     private JSONArray jsonArrayAttachJsonObject;
     private GlobalDomain globalDomain = GlobalDomain.getInstance();
-    private boolean allowed = false, confirm = false, nonConfirm = false, conf2Req = false, isEdit = false, haveAttachment = false, processStatusIsValidForEdit = false;
+    private boolean allowed = false, confirm = false, nonConfirm = false, conf2Req = false, isEdit = false, haveAttachment = false,
+            processStatusIsValidForEdit = false;
     private AppController application;
     private List<String> attachFileSettingListId;
     private List<String> attachFileSettingListName;
@@ -129,6 +131,7 @@ public class EditAdvertActivity extends AppCompatActivity {
     private int minRecord = 0, maxRecord = 0, maxRecordCopy = 0, forceIsEn = 0, loopCount, max = 0, min = 0;
     private boolean isMaxCorrect = true;
     private Dialog dialog;
+    private LinearLayout layout_car,layout_advert,layout_requestDate,layout_description;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -143,6 +146,10 @@ public class EditAdvertActivity extends AppCompatActivity {
         txt_userCreation = findViewById(R.id.txt_userCreation);
         txt_dateCreation = findViewById(R.id.txt_dateCreation);
         edt_description = findViewById(R.id.edt_description);
+        txt_car = findViewById(R.id.txt_car);
+        txt_advertName = findViewById(R.id.txt_advertName);
+        txt_requestDate = findViewById(R.id.txt_requestDate);
+        txt_description = findViewById(R.id.txt_description);
         txt_title = findViewById(R.id.txt_title);
         txt_attachCount = findViewById(R.id.txt_attachCount);
         btn_edit = findViewById(R.id.btn_edit);
@@ -151,6 +158,10 @@ public class EditAdvertActivity extends AppCompatActivity {
         closeIcon = findViewById(R.id.closeIcon);
         img_add = findViewById(R.id.img_add);
         spinner = findViewById(R.id.spinner);
+        layout_car = findViewById(R.id.layout_car);
+        layout_advert = findViewById(R.id.layout_advert);
+        layout_description = findViewById(R.id.layout_description);
+        layout_requestDate = findViewById(R.id.layout_requestDate);
         recyclerViewEditAttach = findViewById(R.id.recyclerViewEditAttach);
         recyclerViewEditAttach.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         application = (AppController) getApplication();
@@ -159,11 +170,6 @@ public class EditAdvertActivity extends AppCompatActivity {
             nameFamily = application.getCurrentUser().getName() + " " + application.getCurrentUser().getFamily();
             txt_userCreation.setText(nameFamily);
         }
-
-        Date date = new Date();
-        String strDate = CalendarUtil.convertPersianDateTime(date, "yyyy/MM/dd HH:mm");
-        //String strTime = CommonUtil.latinNumberToPersian(CalendarUtil.convertPersianDateTime(date, "HH:mm"));
-        txt_dateCreation.setText(strDate);
 
         if (getIntent().getExtras() != null) {
             isEdit = getIntent().getExtras().getBoolean("isEdit");
@@ -183,11 +189,17 @@ public class EditAdvertActivity extends AppCompatActivity {
             conf2Req = getIntent().getExtras().getBoolean("conf2Req");
             processStatusIsValidForEdit = getIntent().getExtras().getBoolean("processStatusIsValidForEdit");
 
+            car = getIntent().getExtras().getString("car");
+            advertName = getIntent().getExtras().getString("advertName");
+            requestDate = getIntent().getExtras().getString("requestDate");
+            startDate = getIntent().getExtras().getString("startDate");
+
             img_add.setVisibility(View.INVISIBLE);
             spinner.setVisibility(View.INVISIBLE);
 
             if (description != null) {
                 edt_description.setText(description);
+                txt_description.setText(description);
             }
 
 
@@ -221,6 +233,38 @@ public class EditAdvertActivity extends AppCompatActivity {
                     btn_nonConfirm.setVisibility(View.GONE);
                     img_add.setVisibility(View.GONE);
                     edt_description.setEnabled(false);
+                    txt_title.setText("جزییات");
+                    txt_car.setText(car);
+                    txt_advertName.setText(advertName);
+                    txt_requestDate.setText(requestDate);
+
+                    layout_car.setVisibility(View.VISIBLE);
+                    layout_advert.setVisibility(View.VISIBLE);
+                    layout_requestDate.setVisibility(View.VISIBLE);
+                    layout_description.setVisibility(View.VISIBLE);
+                    edt_description.setVisibility(View.GONE);
+
+
+                    System.out.println("====startDate=====" + startDate);
+
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                    Date requestDate1 = null;
+                    try {
+                        requestDate1 = simpleDateFormat.parse(startDate);
+                        txt_dateCreation.setText(CommonUtil.latinNumberToPersian(HejriUtil.chrisToHejri(requestDate1)));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                } else {
+                    Date date = new Date();
+                    txt_dateCreation.setText(CommonUtil.latinNumberToPersian(HejriUtil.chrisToHejri(date)));
+
+                    layout_car.setVisibility(View.GONE);
+                    layout_advert.setVisibility(View.GONE);
+                    layout_requestDate.setVisibility(View.GONE);
+                    layout_description.setVisibility(View.GONE);
+                    edt_description.setVisibility(View.VISIBLE);
                 }
 
             } else {
@@ -232,6 +276,12 @@ public class EditAdvertActivity extends AppCompatActivity {
                 btn_edit.setText("ذخیره");
                 img_add.setVisibility(View.INVISIBLE);
                 spinner.setVisibility(View.INVISIBLE);
+                layout_car.setVisibility(View.GONE);
+                layout_advert.setVisibility(View.GONE);
+                layout_requestDate.setVisibility(View.GONE);
+                layout_description.setVisibility(View.GONE);
+                Date date = new Date();
+                txt_dateCreation.setText(CommonUtil.latinNumberToPersian(HejriUtil.chrisToHejri(date)));
             }
 
 
@@ -569,7 +619,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                                        // if (Integer.parseInt(attachFileSettingMinRecord.get(i)) != jsonObj.getInt("max")) {
                                             if (loopCount == attachFileSettingListName.size()) {
                                                // Toast toast = Toast.makeText(EditAdvertActivity.this, "افزودن پیوست " + " " + attachFileSettingListName.get(i) + " ضروری است ", Toast.LENGTH_LONG);
-                                                Toast toast = Toast.makeText(EditAdvertActivity.this, " افزودن حداقل تعداد پیوست الزامیست ", Toast.LENGTH_LONG);
+                                                Toast toast = Toast.makeText(EditAdvertActivity.this, " افزودن حداقل " + minRecord + " پیوست الزامیست ", Toast.LENGTH_LONG);
                                                 CommonUtil.showToast(toast, EditAdvertActivity.this);
                                                 toast.show();
                                             }
@@ -1040,6 +1090,9 @@ public class EditAdvertActivity extends AppCompatActivity {
                     case 3:
                         attachFile.setAttachFileUserFileName(" (سمت چپ خودرو) " + userFileName);
                         break;
+
+                    default:
+                        attachFile.setAttachFileUserFileName(userFileName);
                 }
             }else {
                 attachFile.setAttachFileUserFileName(userFileName);
@@ -1068,7 +1121,7 @@ public class EditAdvertActivity extends AppCompatActivity {
             options.inPurgeable = true; //purgeable to disk
             options.inMutable = true;
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream, null, options);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 40, outputStream); //compressed bitmap to file
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream); //compressed bitmap to file
             byte[] buf = new byte[1024];
             int len;
             while ((len = inputStream.read(buf)) > 0) {
@@ -1260,13 +1313,20 @@ public class EditAdvertActivity extends AppCompatActivity {
                                 if (!attachFileSettingJSONObject.isNull("attachName") && !attachFileSettingJSONObject.isNull("minRecord")) {
 
                                     attachFileSettingId = attachFileSettingListId.get(i);
-                                    if (attachFileSettingId.equals("73") || attachFileSettingId.equals("75") || attachFileSettingId.equals("74")) {
-                                        attachFileSettingListName.add(attachFileSettingJSONObject.getString("attachName") + " - " + " حداقل 4 پیوست الزامیست ");
+
+
+                                    if (!processStatusIsValidForEdit) {
+                                        attachFileSettingListName.add(attachFileSettingJSONObject.getString("attachName"));
                                     } else {
-                                        attachFileSettingListName.add(attachFileSettingJSONObject.getString("attachName") + " - " + " حداقل " + attachFileSettingJSONObject.getString("minRecord") + " پیوست الزامیست ");
+                                        if (attachFileSettingId.equals("73") || attachFileSettingId.equals("75") || attachFileSettingId.equals("74")) {
+                                            attachFileSettingListName.add(attachFileSettingJSONObject.getString("attachName") + " - " + " حداقل 4 پیوست الزامیست ");
+                                        } else {
+                                            attachFileSettingListName.add(attachFileSettingJSONObject.getString("attachName") + " - " + " حداقل " + attachFileSettingJSONObject.getString("minRecord") + " پیوست الزامیست ");
+                                        }
                                     }
 
                                     spinner.setItems(attachFileSettingListName);
+
                                 }
 
                                 if (!attachFileSettingJSONObject.isNull("maxRecord")) {
@@ -1363,7 +1423,7 @@ public class EditAdvertActivity extends AppCompatActivity {
             file.createNewFile();
             FileOutputStream outputStream = new FileOutputStream(file);
 
-            selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
+            selectedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
 
             return file;
         } catch (Exception e) {
