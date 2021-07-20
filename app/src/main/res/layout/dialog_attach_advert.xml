@@ -19,9 +19,8 @@
 
 
             <com.gap.bis_inspection.util.CustomTextView
-                android:id="@+id/txt_drivername"
+                android:id="@+id/txt_title"
                 android:layout_alignParentRight="true"
-                android:text="@string/label_message_dialogAttachFile_title"
                 android:textColor="@color/fav"
                 android:layout_marginRight="10dp"
                 android:textSize="18sp"
@@ -51,43 +50,21 @@
 
     </LinearLayout>
 
-    <com.gap.bis_inspection.util.CustomTextView
-        android:id="@+id/camera_VT"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:textColor="#000"
-        android:textSize="15sp"
-        android:gravity="center"
-        android:layout_margin="5dp"
-        android:text="@string/label_message_dialogAttachFile_camera"
-        android:drawableRight="@drawable/ic_cameraicon"/>
-
-    <View
+    <RelativeLayout
+        android:id="@+id/layout_camera"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/black" />
+        android:layout_height="match_parent">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/upload"
+            android:layout_centerInParent="true"
+            android:layout_margin="20dp"/>
+    </RelativeLayout>
 
-    <com.gap.bis_inspection.util.CustomTextView
-        android:id="@+id/description_locate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:textSize="16sp"
-        android:textColor="@color/fav"
-        android:visibility="gone"/>
 
-    <com.gap.bis_inspection.util.CustomTextView
-        android:id="@+id/gallery_VT"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:textColor="#000"
-        android:textSize="15sp"
-        android:gravity="center"
-        android:layout_margin="5dp"
-        android:text="@string/label_message_dialogAttachFile_gallery"
-        android:drawableRight="@drawable/ic_galleryicon"/>
+
+
 
     <View
         android:layout_width="match_parent"

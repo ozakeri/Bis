@@ -962,39 +962,44 @@ public class EditAdvertActivity extends AppCompatActivity {
         final Dialog dialog = new Dialog(EditAdvertActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_attach_advert);
-        TextView camera = (TextView) dialog.findViewById(R.id.camera_VT);
-        TextView gallery = (TextView) dialog.findViewById(R.id.gallery_VT);
-        TextView description_locate = (TextView) dialog.findViewById(R.id.description_locate);
-        gallery.setVisibility(View.GONE);
+        RelativeLayout camera = dialog.findViewById(R.id.layout_camera);
+        TextView txt_title = dialog.findViewById(R.id.txt_title);
 
-        RelativeLayout closeIcon = (RelativeLayout) dialog.findViewById(R.id.closeIcon);
+        RelativeLayout closeIcon = dialog.findViewById(R.id.closeIcon);
         dialog.show();
 
 
         System.out.println("attachFileSettingId=====" + attachFileSettingId);
+        System.out.println("systemParameterStr=====" + systemParameterStr);
         System.out.println("maxRecord=====" + maxRecord);
 
         if (attachFileSettingId.equals("73") || attachFileSettingId.equals("75") || attachFileSettingId.equals("74")) {
-            description_locate.setVisibility(View.VISIBLE);
+            switch (attachFileIdList.size()) {
+                case 0:
+                    txt_title.setText("تصویر جلوی خودرو");
+                    break;
+
+                case 1:
+                    txt_title.setText("تصویر بدنه سمت راست خودرو");
+                    break;
+
+                case 2:
+                    txt_title.setText("تصویر عقب خودرو");
+                    break;
+
+                case 3:
+                    txt_title.setText("تصویر بدنه سمت چپ خودرو");
+                    break;
+
+                default:
+                    txt_title.setText(systemParameterStr);
+
+            }
+        }else {
+            txt_title.setText(systemParameterStr);
         }
 
-        switch (attachFileIdList.size()) {
-            case 0:
-                description_locate.setText("تصویر جلوی خودرو");
-                break;
 
-            case 1:
-                description_locate.setText("تصویر بدنه سمت راست خودرو");
-                break;
-
-            case 2:
-                description_locate.setText("تصویر عقب خودرو");
-                break;
-
-            case 3:
-                description_locate.setText("تصویر بدنه سمت چپ خودرو");
-                break;
-        }
 
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
