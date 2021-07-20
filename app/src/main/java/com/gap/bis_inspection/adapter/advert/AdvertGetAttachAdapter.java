@@ -20,10 +20,12 @@ public class AdvertGetAttachAdapter extends RecyclerView.Adapter<AdvertGetAttach
 
     private List<Bitmap> bitmapList = null;
     private String attachFileSettingId = null;
+    private String attachFileSettingName = null;
 
-    public AdvertGetAttachAdapter(List<Bitmap> bitmapList, String attachFileSettingId) {
+    public AdvertGetAttachAdapter(List<Bitmap> bitmapList, String attachFileSettingId, String attachFileSettingName) {
         this.bitmapList = bitmapList;
         this.attachFileSettingId = attachFileSettingId;
+        this.attachFileSettingName = attachFileSettingName;
     }
 
     @NonNull
@@ -57,9 +59,12 @@ public class AdvertGetAttachAdapter extends RecyclerView.Adapter<AdvertGetAttach
                 case 3:
                     holder.title_txt.setText("سمت چپ خودرو");
                     break;
+
+                default:
+                    holder.title_txt.setText(attachFileSettingName);
+
             }
         }
-
 
     }
 

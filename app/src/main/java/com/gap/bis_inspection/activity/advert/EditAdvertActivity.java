@@ -114,7 +114,7 @@ public class EditAdvertActivity extends AppCompatActivity {
     private List<Boolean> sysParamCheck = new ArrayList<>();
     private List<String> sysParamListId;
     private List<String> sysParamListName;
-    private String sysParamId, systemParameterStr, attachFileSettingId = null, attachFileSettingIdCopy = null;
+    private String sysParamId, systemParameterStr, attachFileSettingId = null, attachFileSettingName = null;
     private ArrayList<Bitmap> bitmapArray;
     private JSONArray attachFileJsonArrayJsonObject;
     private JSONArray jsonArrayAttachJsonObject;
@@ -124,6 +124,7 @@ public class EditAdvertActivity extends AppCompatActivity {
     private AppController application;
     private List<String> attachFileSettingListId;
     private List<String> attachFileSettingListName;
+    private List<String> attachFileSettingListNameCopy;
     private List<String> attachFileSettingMinRecord;
     private List<String> attachFileSettingMaxrecord;
     private List<Integer> attachFileSettingForceIsEn;
@@ -231,7 +232,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                     btn_edit.setVisibility(View.GONE);
                     btn_confirm.setVisibility(View.GONE);
                     btn_nonConfirm.setVisibility(View.GONE);
-                    img_add.setVisibility(View.INVISIBLE);
+                    img_add.setVisibility(View.GONE);
                     edt_description.setEnabled(false);
                     txt_title.setText("جزییات");
                     txt_car.setText(car);
@@ -317,6 +318,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                     maxRecordCopy = Integer.parseInt(attachFileSettingMaxrecord.get(position));
 
                     attachFileSettingId = attachFileSettingListId.get(position);
+                    attachFileSettingName = attachFileSettingListName.get(position);
                     if (attachFileSettingId != null) {
                         new GetAttachFileList().execute();
                     }
@@ -526,8 +528,8 @@ public class EditAdvertActivity extends AppCompatActivity {
                                     attachFileIdList.add(attachFileJsonArrayObject.getString("attachFileId"));
                                 }
 
-                                recyclerViewEditAttach.setAdapter(new AdvertGetAttachAdapter(bitmapArray,attachFileSettingId));
-                                txt_attachCount.setText(" تعداد پیوست اضافه شده :  " + CommonUtil.latinNumberToPersian(String.valueOf(bitmapArray.size())));
+                                recyclerViewEditAttach.setAdapter(new AdvertGetAttachAdapter(bitmapArray,attachFileSettingId,attachFileSettingName));
+                                txt_attachCount.setText(" تعداد پیوست :  " + CommonUtil.latinNumberToPersian(String.valueOf(bitmapArray.size())));
                             }
                         }
                     }
@@ -970,7 +972,7 @@ public class EditAdvertActivity extends AppCompatActivity {
 
 
         System.out.println("attachFileSettingId=====" + attachFileSettingId);
-        System.out.println("systemParameterStr=====" + systemParameterStr);
+        System.out.println("systemParameterStr==========" + attachFileSettingName);
         System.out.println("maxRecord=====" + maxRecord);
 
         if (attachFileSettingId.equals("73") || attachFileSettingId.equals("75") || attachFileSettingId.equals("74")) {
@@ -992,11 +994,11 @@ public class EditAdvertActivity extends AppCompatActivity {
                     break;
 
                 default:
-                    txt_title.setText(systemParameterStr);
+                    txt_title.setText(attachFileSettingName);
 
             }
         }else {
-            txt_title.setText(systemParameterStr);
+            txt_title.setText(attachFileSettingName);
         }
 
 
@@ -1315,6 +1317,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                             JSONArray attachFileSettingListJsonArray = jsonObj.getJSONArray("attachFileSettingListJsonArray");
                             attachFileSettingListId = new ArrayList<>();
                             attachFileSettingListName = new ArrayList<>();
+                            attachFileSettingListNameCopy = new ArrayList<>();
                             attachFileSettingMinRecord = new ArrayList<>();
                             attachFileSettingMaxrecord = new ArrayList<>();
                             attachFileSettingForceIsEn = new ArrayList<>();
@@ -1328,7 +1331,7 @@ public class EditAdvertActivity extends AppCompatActivity {
 
                                     attachFileSettingId = attachFileSettingListId.get(i);
 
-
+                                    attachFileSettingListNameCopy.add(attachFileSettingJSONObject.getString("attachName"));
                                     if (!processStatusIsValidForEdit) {
                                         attachFileSettingListName.add(attachFileSettingJSONObject.getString("attachName"));
                                     } else {
@@ -1357,6 +1360,7 @@ public class EditAdvertActivity extends AppCompatActivity {
 
                                 new GetAttachFileList().execute();
                                 attachFileSettingId = attachFileSettingListId.get(0);
+                                attachFileSettingName = attachFileSettingListNameCopy.get(0);
 
 
                                 if (attachFileSettingId.equals("73") || attachFileSettingId.equals("75") || attachFileSettingId.equals("74")) {
@@ -1723,7 +1727,6 @@ public class EditAdvertActivity extends AppCompatActivity {
 
                     //maxRecord = Integer.parseInt(attachFileSettingMaxrecord.get(i));
                     forceIsEn = attachFileSettingForceIsEn.get(i);
-                    attachFileSettingIdCopy = attachFileSettingListId.get(i);
                     maxRecordCopy += Integer.parseInt(attachFileSettingMaxrecord.get(i));
                     if (forceIsEn == 1) {
                         getMaxSize(i);

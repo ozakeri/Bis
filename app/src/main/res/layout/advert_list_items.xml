@@ -12,27 +12,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/bgColor"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="3dp"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints">
 
         <com.gap.bis_inspection.util.CustomTextView
             android:id="@+id/txt_name"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="0.5dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/black"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+            android:maxLines="5" />
 
         <com.gap.bis_inspection.util.CustomTextView
             android:id="@+id/txt_line"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="0.5dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/black"
@@ -42,13 +41,11 @@
             android:id="@+id/txt_car"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="0.5dp"
+            android:layout_margin="5dp"
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/black"
-            tools:ignore="MissingConstraints"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"/>
+            tools:ignore="MissingConstraints" />
 
     </LinearLayout>
 

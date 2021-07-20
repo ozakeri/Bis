@@ -227,102 +227,116 @@
                         android:layout_margin="3dp"/>
                 </LinearLayout>
 
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edt_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/textview_report_style"
+                    android:gravity="right"
+                    android:hint=" توضیحات فرآیند  "
+                    android:lineSpacingMultiplier="1.5"
+                    android:padding="5dp"
+                    android:scrollbars="vertical"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/mdtp_transparent_black"
+                    android:textCursorDrawable="@null"
+                    android:layout_below="@+id/cardView"
+                    android:textSize="12sp"
+                    android:visibility="visible"/>
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/edt_description"
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/textview_report_style"
-            android:gravity="right"
-            android:hint=" توضیحات فرآیند  "
-            android:lineSpacingMultiplier="1.5"
-            android:padding="5dp"
-            android:scrollbars="vertical"
-            android:textColor="@color/black"
-            android:textColorHint="@color/mdtp_transparent_black"
-            android:textCursorDrawable="@null"
+            android:layout_height="match_parent"
             android:layout_below="@+id/cardView"
-            android:textSize="12sp"
-            android:visibility="visible"/>
+            android:layout_margin="5dp">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ویرایش"
-            android:textColor="@color/white"
-            android:layout_margin="20dp"
-            android:layout_below="@+id/recyclerViewEditAttach"
-            android:layout_alignParentLeft="true"
-            android:background="@color/fav"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/btn_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_below="@+id/recyclerViewEditAttach"
-            android:layout_alignParentRight="true">
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ویرایش"
+                    android:textColor="@color/white"
+                    android:layout_margin="20dp"
+                    android:layout_below="@+id/txt_attachCount"
+                    android:layout_alignParentLeft="true"
+                    android:background="@color/fav"/>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_nonConfirm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="عدم تایید"
-                android:textColor="@color/white"
-                android:layout_margin="20dp"
-                android:background="@color/fav"
-                android:layout_alignParentRight="true"/>
+                <LinearLayout
+                    android:id="@+id/btn_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/txt_attachCount"
+                    android:layout_alignParentRight="true">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_confirm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="تایید"
-                android:textColor="@color/white"
-                android:layout_margin="20dp"
-                android:background="@color/fav"
-                android:layout_alignParentRight="true"/>
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_nonConfirm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="عدم تایید"
+                        android:textColor="@color/white"
+                        android:layout_margin="20dp"
+                        android:background="@color/fav"
+                        android:layout_alignParentRight="true"/>
 
-        </LinearLayout>
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_confirm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="تایید"
+                        android:textColor="@color/white"
+                        android:layout_margin="20dp"
+                        android:background="@color/fav"
+                        android:layout_alignParentRight="true"/>
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/img_add"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_below="@+id/edt_description"
-            android:layout_alignParentRight="true"
-            android:layout_margin="10dp"
-            android:background="@mipmap/attach"/>
+                </LinearLayout>
 
-        <com.jaredrummler.materialspinner.MaterialSpinner
-            android:id="@+id/spinner"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:textColor="@color/black"
-            android:layout_margin="5dp"
-            android:layout_toLeftOf="@+id/img_add"
-            android:layout_below="@+id/edt_description"/>
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/img_add"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="10dp"
+                    android:background="@mipmap/attach"/>
 
-        <com.gap.bis_inspection.util.CustomTextView
-            android:id="@+id/txt_attachCount"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_below="@+id/edt_description"
-            android:layout_toLeftOf="@+id/spinner"
-            android:textColor="@color/fav"
-            android:gravity="center"
-            android:layout_margin="5dp"/>
+                <com.jaredrummler.materialspinner.MaterialSpinner
+                    android:id="@+id/spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:layout_margin="5dp"
+                    android:layout_toLeftOf="@+id/img_add" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewEditAttach"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/spinner"
-            android:layout_marginTop="5dp"/>
+                <com.gap.bis_inspection.util.CustomTextView
+                    android:id="@+id/txt_attachCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/recyclerViewEditAttach"
+                    android:textColor="@color/fav"
+                    android:gravity="center"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="5dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewEditAttach"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/spinner"
+                    android:layout_marginTop="5dp"/>
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+
 
 
     </RelativeLayout>

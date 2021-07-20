@@ -43,7 +43,7 @@ public class AdvertListAdapter extends RecyclerView.Adapter<AdvertListAdapter.Cu
             if (position % 2 == 0){
                 holder.linearLayout.setBackgroundResource(R.color.mdtp_circle_color);
             }else {
-                holder.linearLayout.setBackgroundResource(R.color.white);
+                holder.linearLayout.setBackgroundResource(R.color.mdtp_accent_color_focused);
             }
 
             if (!json.isNull("adverNameStrFV")) {
@@ -57,7 +57,7 @@ public class AdvertListAdapter extends RecyclerView.Adapter<AdvertListAdapter.Cu
 
             if (!json.isNull("car")) {
                 JSONObject jsonDate = json.getJSONObject("car");
-                holder.txt_car.setText(jsonDate.getString("nameFv"));
+                holder.txt_car.setText(jsonDate.getString("plateText"));
             }
 
 

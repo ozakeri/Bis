@@ -119,9 +119,14 @@ public class AdvertAdapter extends RecyclerView.Adapter<AdvertAdapter.CustomView
 
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                 String date = jsonDate.getString("startDate");
+
+                System.out.println("date=-==-=-=-" + date);
+
                 Date startDate = simpleDateFormat.parse(date);
-                String hejriStartDate = HejriUtil.chrisToHejriDateTime(startDate);
+                String hejriStartDate = HejriUtil.chrisToHejriDateTimeForAdvert(startDate);
                 holder.txt_date.setText(CommonUtil.latinNumberToPersian(hejriStartDate));
+
+                System.out.println("hejriStartDate=-==-=-=-" + hejriStartDate);
             }
 
             System.out.println("processStatusIsValidForEdit====" + processStatusIsValidForEdit);
