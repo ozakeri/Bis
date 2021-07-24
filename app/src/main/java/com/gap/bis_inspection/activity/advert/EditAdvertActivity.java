@@ -415,6 +415,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                     attachFileJsonArrayJsonObject = attachFileJsonArrayObject.getJSONArray("attachFileJsonArray");
                     Bundle b = new Bundle();
                     b.putString("attachFileJsonArrayJsonObject", attachFileJsonArrayJsonObject.toString());
+                    b.putString("result", "EditAdvertActivity");
                     Intent intent = new Intent(getApplicationContext(), FullScreenActivity.class);
                     intent.putExtras(b);
                     startActivity(intent);

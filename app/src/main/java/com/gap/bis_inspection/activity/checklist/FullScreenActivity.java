@@ -35,30 +35,23 @@ public class FullScreenActivity extends AppCompatActivity {
 
         if (bundle != null) {
 
-            if (bundle.getString("attachFileJsonArrayJsonObject") != null) {
-                String s = bundle.getString("attachFileJsonArrayJsonObject");
-                JSONArray array = null;
-                try {
-                    array = new JSONArray(s);
-                    byte[] bytes = new byte[0];
-                    bytes = new byte[array.length()];
-                    for (int j = 0; j < array.length(); j++) {
-                        bytes[j] = Integer.valueOf(array.getInt(j)).byteValue();
-                    }
-
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    image_View.setImageBitmap(bitmap);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+               String s = bundle.getString("attachFileJsonArrayJsonObject");
+            JSONArray array = null;
+            try {
+                array = new JSONArray(s);
+                byte[] bytes = new byte[0];
+                bytes = new byte[array.length()];
+                for (int j = 0; j < array.length(); j++) {
+                    bytes[j] = Integer.valueOf(array.getInt(j)).byteValue();
                 }
-                return;
+
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                image_View.setImageBitmap(bitmap);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
 
-
-            String path = bundle.getString("imagePath");
             String res = bundle.getString("result");
-            Bitmap bitmap = resizeBitmap(path);
-            image_View.setImageBitmap(bitmap);
 
 
             if (res != null) {
@@ -66,6 +59,8 @@ public class FullScreenActivity extends AppCompatActivity {
                     layoutToolbar.setBackgroundResource(R.color.toolbarForm);
                 } else if (res.equals("checkList")) {
                     layoutToolbar.setBackgroundResource(R.color.toolbarCheckList);
+                } else if (res.equals("EditAdvertActivity")) {
+                    layoutToolbar.setBackgroundColor(getResources().getColor(R.color.fav));
                 }
             }
         }
