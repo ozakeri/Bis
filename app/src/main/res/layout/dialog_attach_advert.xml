@@ -46,7 +46,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/black" />
+            android:background="@color/mdtp_date_picker_month_day" />
 
     </LinearLayout>
 

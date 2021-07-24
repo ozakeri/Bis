@@ -6,6 +6,7 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import org.json.JSONException;
 public class FullScreenActivity extends AppCompatActivity {
     private TouchImageView image_View;
     private RelativeLayout layoutToolbar;
+    private ImageView img_close;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,7 @@ public class FullScreenActivity extends AppCompatActivity {
         image_View = (TouchImageView) findViewById(R.id.image_View);
         layoutToolbar = (RelativeLayout) findViewById(R.id.layoutToolbar);
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.back_Icon);
+        img_close =  findViewById(R.id.img_close);
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null) {
@@ -80,6 +83,13 @@ public class FullScreenActivity extends AppCompatActivity {
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                finish();
+            }
+        });
+
+        img_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 finish();
             }
         });

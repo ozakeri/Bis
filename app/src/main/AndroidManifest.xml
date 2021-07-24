@@ -44,6 +44,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
+        android:configChanges="orientation|keyboardHidden"
         tools:targetApi="m">
         <activity android:name=".activity.advert.EditAdvertActivity"></activity>
         <activity android:name=".activity.advert.AdvertListActivity" />
