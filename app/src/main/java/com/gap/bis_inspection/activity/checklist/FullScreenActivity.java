@@ -34,7 +34,6 @@ public class FullScreenActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null) {
-
                String s = bundle.getString("attachFileJsonArrayJsonObject");
             JSONArray array = null;
             try {
