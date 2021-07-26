@@ -43,7 +43,6 @@ public class FullScreenActivity extends AppCompatActivity {
                 for (int j = 0; j < array.length(); j++) {
                     bytes[j] = Integer.valueOf(array.getInt(j)).byteValue();
                 }
-
                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 image_View.setImageBitmap(bitmap);
             } catch (JSONException e) {
