@@ -296,11 +296,6 @@ public class EditAdvertActivity extends AppCompatActivity {
                 txt_dateCreation.setText(CommonUtil.latinNumberToPersian(HejriUtil.chrisToHejri(date)));
             }
 
-
-            System.out.println("processBisSettingVO====" + processBisSettingVO);
-            System.out.println("haveAttachment====" + haveAttachment);
-            System.out.println("advertisementId=====" + advertisementId);
-
             new GetAttachFileSettingItem().execute();
 
             spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
@@ -313,8 +308,6 @@ public class EditAdvertActivity extends AppCompatActivity {
                     } else {
                         minRecord = Integer.parseInt(attachFileSettingMinRecord.get(position));
                     }
-
-                    System.out.println("minRecord=====" + minRecord);
 
                     maxRecord = Integer.parseInt(attachFileSettingMaxrecord.get(position));
                     maxRecordCopy = Integer.parseInt(attachFileSettingMaxrecord.get(position));
@@ -1153,7 +1146,6 @@ public class EditAdvertActivity extends AppCompatActivity {
             coreService.updateAttachFile(attachFile);
 
             services.resumeAttachFileList(attachFileSettingId);
-
 
             progressDialogSentData = new ProgressDialog(EditAdvertActivity.this);
             progressDialogSentData.setMessage(getResources().getString(R.string.label_progress_dialog));
