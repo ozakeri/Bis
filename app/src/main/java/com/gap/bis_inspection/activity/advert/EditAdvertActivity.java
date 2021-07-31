@@ -244,7 +244,6 @@ public class EditAdvertActivity extends AppCompatActivity {
                     Date requestDate1 = null;
                     try {
                         requestDate1 = simpleDateFormat.parse(requestDate);
-                        System.out.println("====simpleDateFormat2=====" + CommonUtil.latinNumberToPersian(HejriUtil.chrisToHejriDateTime(requestDate1)));
                         txt_requestDate.setText(CommonUtil.latinNumberToPersian(HejriUtil.chrisToHejriDateTime(requestDate1)));
                     } catch (ParseException e) {
                         e.printStackTrace();
