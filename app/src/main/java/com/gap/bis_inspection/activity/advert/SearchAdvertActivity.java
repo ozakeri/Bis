@@ -356,7 +356,6 @@ public class SearchAdvertActivity extends AppCompatActivity {
 
                         if (!advertisementDetailVOJsonObject.isNull("lastProcessBisDataIsValidForDoNext")) {
                             show = advertisementDetailVOJsonObject.getBoolean("lastProcessBisDataIsValidForDoNext");
-                            System.out.println("show=====1111" + show);
                         }
 
                         if (!advertisementDetailVOJsonObject.isNull("car")) {
@@ -368,7 +367,6 @@ public class SearchAdvertActivity extends AppCompatActivity {
 
                             if (!carJsonObject.isNull("propertyCode")) {
                                 propertyCode = carJsonObject.getString("propertyCode");
-                                System.out.println("propertyCode====" + propertyCode);
                                 SharedPreferences.Editor editor = AppController.getInstance().getSharedPreferences().edit();
                                 editor.putString("propertyCode", propertyCode);
                                 editor.apply();
@@ -413,7 +411,6 @@ public class SearchAdvertActivity extends AppCompatActivity {
                                 processBisSettingVOList.add(processBisDataVOJsonObject);
                             }
 
-                            System.out.println("show=====222" + show);
                             if (show) {
                                 buttonRecyclerView.setVisibility(View.VISIBLE);
                             } else {
@@ -472,7 +469,6 @@ public class SearchAdvertActivity extends AppCompatActivity {
                             JSONObject processBisDataVO = jsonObject.getJSONObject("processBisDataVO");
                             if (!processBisDataVO.isNull("id")) {
                                 ProcessBisDataVOId = processBisDataVO.getString("id");
-                                System.out.println("SaveAd=====" + processBisDataVO.getString("id"));
                                 showDialogAttach();
                             }
                         }
@@ -615,7 +611,6 @@ public class SearchAdvertActivity extends AppCompatActivity {
             String path = null;
             path = getPathCamera();
             saveAttachImageFile(path);
-            System.out.println("saveAttachImageFile====");
             refreshAttachAdapter();
         }
     }
