@@ -8,5 +8,5 @@
     <dimen name="textFontSize_home">24sp</dimen>
     <dimen name="textFontSize_titleTable">14sp</dimen>
     <dimen name="textFontSize_rowTable">12sp</dimen>
-
+    <dimen name="image_dialog_image_margin">50dp</dimen>
 </resources>

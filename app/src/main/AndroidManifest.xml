@@ -26,6 +26,7 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.hardware.camera.autofocus" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -46,7 +47,7 @@
         tools:ignore="GoogleAppIndexingWarning"
         android:configChanges="orientation|keyboardHidden"
         tools:targetApi="m">
-        <activity android:name=".activity.advert.EditAdvertActivity"></activity>
+        <activity android:name=".activity.advert.EditAdvertActivity"/>
         <activity android:name=".activity.advert.AdvertListActivity" />
         <activity android:name=".activity.advert.AdvertActivity" />
         <activity android:name=".activity.advert.SearchAdvertActivity" />
@@ -117,6 +118,9 @@
         </activity>
         <activity
             android:name=".activity.car.CarActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CaptureActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.line.LineActivity"

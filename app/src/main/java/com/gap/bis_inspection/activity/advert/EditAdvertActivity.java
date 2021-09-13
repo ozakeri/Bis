@@ -1,31 +1,49 @@
 package com.gap.bis_inspection.activity.advert;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.app.Activity.RESULT_OK;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.hardware.Camera;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.Surface;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -33,7 +51,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -42,8 +60,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.gap.bis_inspection.BuildConfig;
 import com.gap.bis_inspection.R;
 import com.gap.bis_inspection.activity.checklist.FullScreenActivity;
+import com.gap.bis_inspection.activity.report.ReportNoneEntityActivity;
 import com.gap.bis_inspection.adapter.advert.AdvertGetAttachAdapter;
 import com.gap.bis_inspection.app.AppController;
 import com.gap.bis_inspection.common.CommonUtil;
@@ -57,14 +77,25 @@ import com.gap.bis_inspection.db.objectmodel.GlobalDomain;
 import com.gap.bis_inspection.exception.WebServiceException;
 import com.gap.bis_inspection.service.CoreService;
 import com.gap.bis_inspection.service.Services;
+import com.gap.bis_inspection.util.CameraPreview;
+import com.gap.bis_inspection.util.Config;
+import com.gap.bis_inspection.util.CustomProgressDialog;
 import com.gap.bis_inspection.util.CustomTextView;
 import com.gap.bis_inspection.util.EventBusModel;
+import com.gap.bis_inspection.util.ImageManager;
 import com.gap.bis_inspection.util.RecyclerItemClickListener;
 import com.gap.bis_inspection.util.RecyclerTouchListener;
 import com.gap.bis_inspection.util.volly.ResponseBean;
 import com.gap.bis_inspection.util.volly.VollyService;
 import com.gap.bis_inspection.webservice.MyPostJsonService;
+import com.gap.bis_inspection.widget.GPSTracker;
 import com.jaredrummler.materialspinner.MaterialSpinner;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -83,12 +114,30 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Locale;
+
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 public class EditAdvertActivity extends AppCompatActivity {
 
@@ -111,7 +160,7 @@ public class EditAdvertActivity extends AppCompatActivity {
     private String path;
     private AttachFile attachFile;
     private Services services;
-    private ProgressDialog progressDialogSentData = null;
+    private ProgressDialog progressDialogSentData;
     private int processStatus, actionProcessStatus;
     private List<Boolean> sysParamCheck = new ArrayList<>();
     private List<String> sysParamListId;
@@ -134,7 +183,29 @@ public class EditAdvertActivity extends AppCompatActivity {
     private int minRecord = 0, maxRecord = 0, maxRecordCopy = 0, forceIsEn = 0, loopCount, max = 0, min = 0;
     private boolean isMaxCorrect = true;
     private Dialog dialog;
-    private LinearLayout layout_car,layout_advert,layout_requestDate,layout_description;
+    private LinearLayout layout_car, layout_advert, layout_requestDate, layout_description;
+
+    private static final int REQUEST_CODE_CHANGE_SETTING = 1;
+    private static final int TIME_STAMP_UPDATE_INTERVAL = 1000;
+    private Camera camera;
+    private CameraPreview preview;
+    private TextView txtDate;
+    private SimpleDateFormat sdf;
+    private Handler handler = new Handler();
+    private Runnable runnableSetDateText = new Runnable() {
+        @Override
+        public void run() {
+            txtDate.setText(sdf.format(new Date()));
+            handler.postDelayed(runnableSetDateText, TIME_STAMP_UPDATE_INTERVAL);
+        }
+    };
+    private FrameLayout frameLayout;
+
+    // bunch of location related apis
+
+    private static final int REQUEST_LOCATION = 1;
+    LocationManager locationManager;
+    String latitude, longitude;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -166,12 +237,27 @@ public class EditAdvertActivity extends AppCompatActivity {
         layout_description = findViewById(R.id.layout_description);
         layout_requestDate = findViewById(R.id.layout_requestDate);
         recyclerViewEditAttach = findViewById(R.id.recyclerViewEditAttach);
+        frameLayout = findViewById(R.id.frameLayout);
         recyclerViewEditAttach.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         application = (AppController) getApplication();
+
+        txtDate = (TextView) findViewById(R.id.txtDate);
+        sdf = new SimpleDateFormat(Config.TIME_STAMP_FORMAT, Locale.getDefault());
+        txtDate.setText(sdf.format(new Date()));
+        handler.postDelayed(runnableSetDateText, TIME_STAMP_UPDATE_INTERVAL);
 
         if (application.getCurrentUser().getName() != null && application.getCurrentUser().getFamily() != null) {
             nameFamily = application.getCurrentUser().getName() + " " + application.getCurrentUser().getFamily();
             txt_userCreation.setText(nameFamily);
+        }
+
+        ActivityCompat.requestPermissions( this,
+                new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            OnGPS();
+        } else {
+            getLocation();
         }
 
         if (getIntent().getExtras() != null) {
@@ -386,12 +472,45 @@ public class EditAdvertActivity extends AppCompatActivity {
         img_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (attachFileIdList.size() == maxRecord) {
                     Toast toast = Toast.makeText(EditAdvertActivity.this, "تعداد ثبت پیوست محدود است", Toast.LENGTH_SHORT);
                     CommonUtil.showToast(toast, EditAdvertActivity.this);
                     toast.show();
                 } else {
-                    showAttachDialog();
+                    //showAttachDialog();
+
+
+                    if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE) + ContextCompat
+                            .checkSelfPermission(getApplicationContext(),
+                                    Manifest.permission.CAMERA)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        if (ActivityCompat.shouldShowRequestPermissionRationale
+                                (EditAdvertActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
+                                ActivityCompat.shouldShowRequestPermissionRationale
+                                        (EditAdvertActivity.this, Manifest.permission.CAMERA)) {
+                            finish();
+                        } else {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                requestPermissions(
+                                        new String[]{Manifest.permission
+                                                .WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA},
+                                        MY_PERMISSIONS_REQUEST);
+                            }
+                        }
+
+                    } else {
+
+                        if (getLocation()){
+                            startPreview(null);
+                        }else {
+                            getLocation();
+                        }
+
+
+                    }
+
                 }
 
             }
@@ -1055,7 +1174,7 @@ public class EditAdvertActivity extends AppCompatActivity {
         return cursor.getString(column_index_data);
     }
 
-    @Override
+   /* @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
@@ -1065,7 +1184,7 @@ public class EditAdvertActivity extends AppCompatActivity {
             System.out.println("saveAttachImageFile====");
             refreshAttachAdapter();
         }
-    }
+    }*/
 
     public void saveAttachImageFile(String filePath) {
         try {
@@ -1741,9 +1860,13 @@ public class EditAdvertActivity extends AppCompatActivity {
     @Subscribe
     public void alertForCloseDialog(EventBusModel event) {
         if (event.isComplete()) {
+            System.out.println("========isComplete=========");
             Toast.makeText(EditAdvertActivity.this, "ارسال شد", Toast.LENGTH_LONG).show();
-            progressDialogSentData.dismiss();
-            new GetAttachFileList().execute();
+            if (progressDialogSentData != null) {
+                progressDialogSentData.dismiss();
+            }
+            //new GetAttachFileList().execute();
+            refreshAttachAdapter();
         }
 
         if (event.getIsMaxCorrect() == 1) {
@@ -1856,16 +1979,235 @@ public class EditAdvertActivity extends AppCompatActivity {
             FileOutputStream out = new FileOutputStream(imagePath);
             if (imageType.equalsIgnoreCase("png")) {
                 b.compress(Bitmap.CompressFormat.PNG, 100, out);
-            }else if (imageType.equalsIgnoreCase("jpeg")|| imageType.equalsIgnoreCase("jpg")) {
+            } else if (imageType.equalsIgnoreCase("jpeg") || imageType.equalsIgnoreCase("jpg")) {
                 b.compress(Bitmap.CompressFormat.JPEG, 100, out);
             }
             fOut.flush();
             fOut.close();
 
             b.recycle();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return imagePath;
+    }
+
+    private void startPreview(String pictureSizeStr) {
+        frameLayout.setVisibility(View.VISIBLE);
+        if (camera != null) {
+            camera.release();
+            camera = null;
+        }
+
+        camera = getCameraInstance();
+
+        if (camera == null) {
+            Log.e("jisunLog", "Failed camera open");
+        } else {
+
+            FrameLayout layoutPreview = (FrameLayout) findViewById(R.id.layoutPreview);
+            if (preview != null) {
+                layoutPreview.removeView(preview);
+                preview = null;
+            }
+
+            preview = new CameraPreview(this, camera);
+            preview.setKeepScreenOn(true);
+
+            // 저장 사진과 preview의 사이즈 등을 설정
+            ImageManager.adjustCameraParameters(this, camera, pictureSizeStr);
+
+            // preview가 보여지는 화면의 비율 설정
+            DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+            FrameLayout.LayoutParams p = (FrameLayout.LayoutParams) layoutPreview.getLayoutParams();
+            p.height = displayMetrics.widthPixels / 3 * 4;
+            layoutPreview.setLayoutParams(p);
+
+            // preview를 layout에 추가하고, 날짜 영역을 화면 상위로 올림
+            layoutPreview.addView(preview);
+            findViewById(R.id.txtDate).bringToFront();
+        }
+    }
+
+    public static int setCameraDisplayOrientation(Activity activity,
+                                                  int cameraId, Camera camera) {
+        Camera.CameraInfo info =
+                new Camera.CameraInfo();
+        Camera.getCameraInfo(cameraId, info);
+        int rotation = activity.getWindowManager().getDefaultDisplay()
+                .getRotation();
+        int degrees = 0;
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break;
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break;
+            case Surface.ROTATION_180:
+                degrees = 180;
+                break;
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;
+        }
+
+        int result;
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation + degrees) % 360;
+            result = (360 - result) % 360;  // compensate the mirror
+        } else {  // back-facing
+            result = (info.orientation - degrees + 360) % 360;
+        }
+
+        return result;
+    }
+
+    public Camera getCameraInstance() {
+        Camera camera = null;
+
+        int numCams = Camera.getNumberOfCameras();
+        if (numCams > 0) {
+            try {
+                // Camera.CameraInfo.CAMERA_FACING_FRONT or Camera.CameraInfo.CAMERA_FACING_BACK
+                int cameraFacing = Camera.CameraInfo.CAMERA_FACING_BACK;
+                camera = Camera.open(cameraFacing);
+                // camera orientation
+                camera.setDisplayOrientation(setCameraDisplayOrientation(this, cameraFacing, camera));
+                // get Camera parameters
+                Camera.Parameters params = camera.getParameters();
+                // picture image orientation
+                params.setRotation(setCameraDisplayOrientation(this, cameraFacing, camera));
+                camera.startPreview();
+
+            } catch (RuntimeException ex) {
+                Toast.makeText(this, "camera_not_found ] " + ex.getMessage().toString(), Toast.LENGTH_LONG).show();
+                Log.d(Config.TAG, "camera_not_found ] " + ex.getMessage().toString());
+            }
+        }
+
+        return camera;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CODE_CHANGE_SETTING:
+                if (resultCode == RESULT_OK) {
+
+
+                    // TODO jisun : 사진 저장 사이즈 변경하기
+                    String str = data.getStringExtra(Config.PREF_KEY_PICTURE_SIZE);
+
+                    ((FrameLayout) findViewById(R.id.layoutPreview)).removeView(preview);
+                    preview = null;
+
+                    startPreview(str);
+                }
+                break;
+            default:
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void onClickCapture(View v) {
+        camera.takePicture(null, null, new Camera.PictureCallback() {
+
+            @Override
+            public void onPictureTaken(byte[] data, Camera camera) {
+                new AsyncTask<byte[], Void, File>() {
+                    public float textSize;
+                    private CustomProgressDialog progressDialog;
+
+                    @Override
+                    protected void onPreExecute() {
+                        super.onPreExecute();
+                        progressDialog = new CustomProgressDialog(EditAdvertActivity.this);
+                        progressDialog.setCancelable(false);
+                        progressDialog.setCanceledOnTouchOutside(false);
+                        progressDialog.show();
+
+                        textSize = txtDate.getTextSize();
+                        textSize = txtDate.getTextSize();
+                    }
+
+                    @Override
+                    protected File doInBackground(byte[]... params) {
+                        byte[] data = params[0];
+                        Bitmap bitmap = ImageManager.saveImageWithTimeStamp(EditAdvertActivity.this, data, 0, data.length, textSize);
+                        File file = ImageManager.saveFile(bitmap);
+                        refreshGallery(file);
+                        return file;
+                    }
+
+                    @Override
+                    protected void onPostExecute(File file) {
+                        progressDialog.dismiss();
+
+                        if (file == null) {
+                            Log.e(Config.TAG, "Error creating media file, check storage permissions");
+                        } else {
+                           /* ImageDialog dialog = new ImageDialog(EditAdvertActivity.this, file);
+                            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                @Override
+                                public void onDismiss(DialogInterface dialog) {
+                                    EditAdvertActivity.this.camera.startPreview();
+                                }
+                            });
+                            dialog.show();*/
+                            saveAttachImageFile(file.getPath());
+                            frameLayout.setVisibility(View.GONE);
+                            progressDialogSentData.dismiss();
+                        }
+
+                        super.onPostExecute(file);
+                    }
+                }.execute(data);
+            }
+        });
+    }
+
+    private void refreshGallery(File file) {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        mediaScanIntent.setData(Uri.fromFile(file));
+        sendBroadcast(mediaScanIntent);
+    }
+
+    private void OnGPS() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Enable GPS").setCancelable(false).setPositiveButton("Yes", new  DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+            }
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+    private boolean getLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                EditAdvertActivity.this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                EditAdvertActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+            return false;
+        } else {
+            Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (locationGPS != null) {
+                double lat = locationGPS.getLatitude();
+                double longi = locationGPS.getLongitude();
+                latitude = String.valueOf(lat);
+                longitude = String.valueOf(longi);
+                System.out.println("Your Location: " + "\n" + "Latitude: " + latitude + "\n" + "Longitude: " + longitude);
+                return true;
+            } else {
+                Toast.makeText(this, "موقعیت مکانی یافت نشد !!!", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
     }
 }
