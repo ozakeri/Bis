@@ -1267,6 +1267,7 @@ public class ReportNoneEntityActivity extends AppCompatActivity {
         }
     }
 
+
     public void startLocationButtonClick() {
         // Requesting ACCESS_FINE_LOCATION using Dexter library
         Dexter.withActivity(this)
@@ -1293,7 +1294,6 @@ public class ReportNoneEntityActivity extends AppCompatActivity {
                     }
                 }).check();
     }
-
 
     private void initLocation() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -1379,27 +1379,6 @@ public class ReportNoneEntityActivity extends AppCompatActivity {
                         updateLocationUI();
                     }
                 });
-    }
-
-    /**
-     * Restoring values from saved instance state
-     */
-    private void restoreValuesFromBundle(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey("is_requesting_updates")) {
-                mRequestingLocationUpdates = savedInstanceState.getBoolean("is_requesting_updates");
-            }
-
-            if (savedInstanceState.containsKey("last_known_location")) {
-                mCurrentLocation = savedInstanceState.getParcelable("last_known_location");
-            }
-
-            if (savedInstanceState.containsKey("last_updated_on")) {
-                mLastUpdateTime = savedInstanceState.getString("last_updated_on");
-            }
-        }
-
-        updateLocationUI();
     }
 
     private void updateLocationUI() {

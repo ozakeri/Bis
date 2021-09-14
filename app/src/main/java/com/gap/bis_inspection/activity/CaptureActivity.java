@@ -187,7 +187,7 @@ public class CaptureActivity extends Activity {
     }
 
 
-    public void onClickCapture(View v) {
+   /* public void onClickCapture(View v) {
         camera.takePicture(null, null, new Camera.PictureCallback() {
 
             @Override
@@ -211,10 +211,10 @@ public class CaptureActivity extends Activity {
                     @Override
                     protected File doInBackground(byte[]... params) {
                         byte[] data = params[0];
-                        Bitmap bitmap = ImageManager.saveImageWithTimeStamp(CaptureActivity.this, data, 0, data.length, textSize);
-                        File file = ImageManager.saveFile(bitmap);
-                        refreshGallery(file);
-                        return file;
+                        //Bitmap bitmap = ImageManager.saveImageWithTimeStamp(CaptureActivity.this, data, 0, data.length, textSize);
+                      //  File file = ImageManager.saveFile(bitmap);
+                      //  refreshGallery(file);
+                      //  return file;
                     }
 
                     @Override
@@ -239,7 +239,7 @@ public class CaptureActivity extends Activity {
                 }.execute(data);
             }
         });
-    }
+    }*/
 
     private void refreshGallery(File file) {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);

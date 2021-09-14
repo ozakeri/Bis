@@ -1,16 +1,20 @@
 package com.gap.bis_inspection.util;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
+
+import com.gap.bis_inspection.R;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -149,7 +153,7 @@ public class ImageManager {
         return mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg";
     }
 
-    public static Bitmap saveImageWithTimeStamp(Context context, byte data[], int offset, int length, float textSize) {
+    public static Bitmap saveImageWithTimeStamp(Context context, byte data[], int offset, int length, float textSize,String text) {
 
         Bitmap src = BitmapFactory.decodeByteArray(data, offset, length);
         Log.e("jisunLog", "src " + src.getWidth() + "x" + src.getHeight());
@@ -157,8 +161,11 @@ public class ImageManager {
         Bitmap dest = Bitmap.createBitmap(src.getWidth(), src.getHeight(), Bitmap.Config.ARGB_8888);
         Log.e("jisunLog", "rotated src " + src.getWidth() + "x" + src.getHeight());
 
+        src = drawTextToBitmap(context,src,text);
+
         SimpleDateFormat sdf = new SimpleDateFormat(Config.TIME_STAMP_FORMAT);
         String dateTime = sdf.format(new Date());
+        String str = dateTime + "\n" + "X: " + "35.760640" + "\n" + "Y: " + "51.421878";
 
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         float scaledTextSize = src.getWidth() * textSize / displayMetrics.widthPixels;
@@ -173,19 +180,17 @@ public class ImageManager {
         cs.drawBitmap(src, 0f, 0f, null);
 
         // 가운데 정렬을 위해 텍스트 시작 시점 계산
-        float height = paint.measureText("yY");
-        float width = paint.measureText(dateTime);
-        float startXPosition = (src.getWidth() - width) / 2;
-
-        cs.drawText(dateTime, startXPosition, src.getHeight() - height + 15f, paint);
-
+        //float height = paint.measureText("yY");
+       // float width = paint.measureText(text);
+       // float startXPosition = (src.getWidth() - width) / 2;
+       // cs.drawText(text, startXPosition, src.getHeight() - height + 15f, paint);
         return dest;
     }
 
     public static File saveFile(Bitmap bitmap) {
         File file = new File(getMediaFilePath());
         try {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, new FileOutputStream(file));
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, new FileOutputStream(file));
         } catch (FileNotFoundException e) {
             Log.e(Config.TAG, e.getLocalizedMessage());
             file = null;
@@ -197,5 +202,60 @@ public class ImageManager {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
+
+    public static Bitmap drawTextToBitmap(Context gContext,
+                                          Bitmap bitmap,
+                                          String gText) {
+        Resources resources = gContext.getResources();
+        float scale = resources.getDisplayMetrics().density;
+
+        android.graphics.Bitmap.Config bitmapConfig =
+                bitmap.getConfig();
+        // set default bitmap config if none
+        if(bitmapConfig == null) {
+            bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
+        }
+        // resource bitmaps are imutable,
+        // so we need to convert it to mutable one
+        bitmap = bitmap.copy(bitmapConfig, true);
+
+        Canvas canvas = new Canvas(bitmap);
+        // new antialised Paint
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        // text color - #3D3D3D
+        paint.setColor(Color.WHITE);
+        // text size in pixels
+        paint.setTextSize((int) (40 * scale));
+        // text shadow
+        paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
+
+        // draw text to the Canvas center
+        Rect bounds = new Rect();
+
+        int noOfLines = 0;
+        for (String line: gText.split("\n")) {
+            noOfLines++;
+        }
+
+        paint.getTextBounds(gText, 0, gText.length(), bounds);
+        int x = 20;
+        int y = (bitmap.getHeight() - bounds.height()*noOfLines);
+
+        Paint mPaint = new Paint();
+        mPaint.setColor(gContext.getResources().getColor(R.color.transparentBlack));
+        int left = bitmap.getWidth();
+        int top = (bitmap.getHeight() - bounds.height()*(noOfLines+1));
+        int right = 0;
+        int bottom = bitmap.getHeight();
+        canvas.drawRect(left, top, right, bottom, mPaint);
+
+        for (String line: gText.split("\n")) {
+            canvas.drawText(line, x, y, paint);
+            y += paint.descent() - paint.ascent();
+        }
+
+        return bitmap;
     }
 }

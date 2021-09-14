@@ -48,6 +48,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -192,20 +193,22 @@ public class EditAdvertActivity extends AppCompatActivity {
     private TextView txtDate;
     private SimpleDateFormat sdf;
     private Handler handler = new Handler();
-    private Runnable runnableSetDateText = new Runnable() {
-        @Override
-        public void run() {
-            txtDate.setText(sdf.format(new Date()));
-            handler.postDelayed(runnableSetDateText, TIME_STAMP_UPDATE_INTERVAL);
-        }
-    };
+    private Runnable runnableSetDateText;
     private FrameLayout frameLayout;
+    private ScrollView scrollView;
 
     // bunch of location related apis
 
     private static final int REQUEST_LOCATION = 1;
     LocationManager locationManager;
     String latitude, longitude;
+
+    private ArrayList<String> permissionsToRequest;
+    private ArrayList<String> permissionsRejected = new ArrayList<>();
+    private ArrayList<String> permissions = new ArrayList<>();
+
+    private final static int ALL_PERMISSIONS_RESULT = 101;
+    GPSTracker locationTrack;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -238,27 +241,48 @@ public class EditAdvertActivity extends AppCompatActivity {
         layout_requestDate = findViewById(R.id.layout_requestDate);
         recyclerViewEditAttach = findViewById(R.id.recyclerViewEditAttach);
         frameLayout = findViewById(R.id.frameLayout);
+        scrollView = findViewById(R.id.scrollView);
         recyclerViewEditAttach.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         application = (AppController) getApplication();
 
         txtDate = (TextView) findViewById(R.id.txtDate);
         sdf = new SimpleDateFormat(Config.TIME_STAMP_FORMAT, Locale.getDefault());
-        txtDate.setText(sdf.format(new Date()));
-        handler.postDelayed(runnableSetDateText, TIME_STAMP_UPDATE_INTERVAL);
 
         if (application.getCurrentUser().getName() != null && application.getCurrentUser().getFamily() != null) {
             nameFamily = application.getCurrentUser().getName() + " " + application.getCurrentUser().getFamily();
             txt_userCreation.setText(nameFamily);
         }
 
-        ActivityCompat.requestPermissions( this,
-                new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            OnGPS();
-        } else {
-            getLocation();
+        permissions.add(ACCESS_FINE_LOCATION);
+        permissions.add(ACCESS_COARSE_LOCATION);
+
+        permissionsToRequest = findUnAskedPermissions(permissions);
+        //get the permissions we have asked for before but are not granted..
+        //we will store this in a global list to access later.
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+
+            if (permissionsToRequest.size() > 0)
+                requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
         }
+
+
+        locationTrack = new GPSTracker(EditAdvertActivity.this);
+
+        if (locationTrack.canGetLocation()) {
+
+
+            longitude = String.valueOf(locationTrack.getLongitude());
+            latitude = String.valueOf(locationTrack.getLatitude());
+
+        } else {
+
+            locationTrack.showSettingsAlert();
+        }
+
+        handler.postDelayed(runnableSetDateText, TIME_STAMP_UPDATE_INTERVAL);
 
         if (getIntent().getExtras() != null) {
             isEdit = getIntent().getExtras().getBoolean("isEdit");
@@ -502,13 +526,15 @@ public class EditAdvertActivity extends AppCompatActivity {
 
                     } else {
 
-                        if (getLocation()){
+                        txtDate.setText(sdf.format(new Date()) + "\n" + "X: " + latitude + "\n" + "Y: " + longitude);
+                        startPreview(null);
+                      /*  if (getLocation()){
                             startPreview(null);
                         }else {
                             getLocation();
                         }
 
-
+*/
                     }
 
                 }
@@ -1994,6 +2020,7 @@ public class EditAdvertActivity extends AppCompatActivity {
 
     private void startPreview(String pictureSizeStr) {
         frameLayout.setVisibility(View.VISIBLE);
+        scrollView.setVisibility(View.GONE);
         if (camera != null) {
             camera.release();
             camera = null;
@@ -2134,7 +2161,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                     @Override
                     protected File doInBackground(byte[]... params) {
                         byte[] data = params[0];
-                        Bitmap bitmap = ImageManager.saveImageWithTimeStamp(EditAdvertActivity.this, data, 0, data.length, textSize);
+                        Bitmap bitmap = ImageManager.saveImageWithTimeStamp(EditAdvertActivity.this, data, 0, data.length, textSize,txtDate.getText().toString());
                         File file = ImageManager.saveFile(bitmap);
                         refreshGallery(file);
                         return file;
@@ -2157,6 +2184,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                             dialog.show();*/
                             saveAttachImageFile(file.getPath());
                             frameLayout.setVisibility(View.GONE);
+                            scrollView.setVisibility(View.VISIBLE);
                             progressDialogSentData.dismiss();
                         }
 
@@ -2171,6 +2199,86 @@ public class EditAdvertActivity extends AppCompatActivity {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         mediaScanIntent.setData(Uri.fromFile(file));
         sendBroadcast(mediaScanIntent);
+    }
+
+
+    private ArrayList<String> findUnAskedPermissions(ArrayList<String> wanted) {
+        ArrayList<String> result = new ArrayList<String>();
+
+        for (String perm : wanted) {
+            if (!hasPermission(perm)) {
+                result.add(perm);
+            }
+        }
+
+        return result;
+    }
+
+    private boolean hasPermission(String permission) {
+        if (canMakeSmores()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED);
+            }
+        }
+        return true;
+    }
+
+    private boolean canMakeSmores() {
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
+    }
+
+
+    @TargetApi(Build.VERSION_CODES.M)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+
+        switch (requestCode) {
+
+            case ALL_PERMISSIONS_RESULT:
+                for (String perms : permissionsToRequest) {
+                    if (!hasPermission(perms)) {
+                        permissionsRejected.add(perms);
+                    }
+                }
+
+                if (permissionsRejected.size() > 0) {
+
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
+                            showMessageOKCancel("These permissions are mandatory for the application. Please allow access.",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                requestPermissions(permissionsRejected.toArray(new String[permissionsRejected.size()]), ALL_PERMISSIONS_RESULT);
+                                            }
+                                        }
+                                    });
+                            return;
+                        }
+                    }
+
+                }
+
+                break;
+        }
+
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(EditAdvertActivity.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        locationTrack.stopUsingGPS();
     }
 
     private void OnGPS() {
@@ -2189,7 +2297,12 @@ public class EditAdvertActivity extends AppCompatActivity {
         final AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+    @SuppressLint("SetTextI18n")
     private boolean getLocation() {
+
+        txtDate.setText(sdf.format(new Date()) + "\n" + "X: " + "35." +
+                "760640" + "\n" + "Y: " + "51.421878");
+
         if (ActivityCompat.checkSelfPermission(
                 EditAdvertActivity.this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                 EditAdvertActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -2202,11 +2315,11 @@ public class EditAdvertActivity extends AppCompatActivity {
                 double longi = locationGPS.getLongitude();
                 latitude = String.valueOf(lat);
                 longitude = String.valueOf(longi);
-                System.out.println("Your Location: " + "\n" + "Latitude: " + latitude + "\n" + "Longitude: " + longitude);
+                System.out.println("Your Location: " + "\n" + "X: " + latitude + "\n" + "Y: " + longitude);
                 return true;
             } else {
                 Toast.makeText(this, "موقعیت مکانی یافت نشد !!!", Toast.LENGTH_SHORT).show();
-                return false;
+                return true;
             }
         }
     }
