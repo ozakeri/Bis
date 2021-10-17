@@ -526,7 +526,7 @@ public class EditAdvertActivity extends AppCompatActivity {
 
                     } else {
 
-                        txtDate.setText(sdf.format(new Date()) + "\n" + "X: " + latitude + "\n" + "Y: " + longitude);
+                        txtDate.setText(" " + sdf.format( new Date()) + "\n" + " " +  "X: " + latitude + "\n" + " " + "Y: " + longitude + "\n" + " ");
                         startPreview(null);
                       /*  if (getLocation()){
                             startPreview(null);

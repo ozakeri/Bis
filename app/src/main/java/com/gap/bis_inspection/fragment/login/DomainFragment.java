@@ -67,7 +67,7 @@ public class DomainFragment extends Fragment {
 
     private RequestQueue mRequestQueue;
     private StringRequest mStringRequest;
-    private String url = "https://bis.isfahanptc.ir/rfServices/getServerDateTime";
+    private String url = "http://bis.isfahanptc.ir/rfServices/getServerDateTime";
     private String[] city = {"tehran", "isfahan", "اصفهان", "تهران"};
 
     @Override
@@ -147,7 +147,7 @@ public class DomainFragment extends Fragment {
                     detectDomain(handler, str);
 
                 } else if (domainEditText.getText().toString().equals("isfahan") || domainEditText.getText().toString().equals("اصفهان")) {
-                    String str = "https://bis.isfahanptc.ir";
+                    String str = "http://bis.isfahanptc.ir";
                     detectDomain(handler, str);
 
                 } else if (domainEditText.getText().toString().equals("31.24.233.169")) {
@@ -155,7 +155,7 @@ public class DomainFragment extends Fragment {
                     detectDomain(handler, str);
 
                 } else if (domainEditText.getText().toString().equals("172.22.226.28")) {
-                    String str = "https://bis.isfahanptc.ir";
+                    String str = "http://bis.isfahanptc.ir";
                     detectDomain(handler, str);
                 }
 

@@ -86,6 +86,6 @@
     <color name="custom_toast_text">#dcdbdb</color>
     <color name="bgColor">#f4f6f9</color>
     <color name="txtColor_sync">#848688</color>
-    <color name="transparentBlack">#64000000</color>
+    <color name="transparentBlack">#56000000</color>
 
 </resources>

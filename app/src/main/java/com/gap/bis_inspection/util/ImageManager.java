@@ -231,9 +231,9 @@ public class ImageManager {
         // text shadow
         paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
 
+
         // draw text to the Canvas center
         Rect bounds = new Rect();
-
         int noOfLines = 0;
         for (String line: gText.split("\n")) {
             noOfLines++;

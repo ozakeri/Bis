@@ -127,8 +127,8 @@
             android:layout_marginRight="48dp"
             android:layout_marginBottom="5dp"
             android:layout_toLeftOf="@+id/txt_carTitle"
-            android:textColor="@color/fav"
-            android:text="-" />
+            android:text="-"
+            android:textColor="@color/fav" />
 
 
         <com.gap.bis_inspection.util.CustomTextViewTitle
@@ -145,7 +145,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/txt_advertNameTitle"
             android:layout_alignParentLeft="true"
-            android:layout_margin="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
             android:text="-" />
 
     </RelativeLayout>
@@ -173,7 +176,7 @@
             android:layout_margin="0.5dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@color/mdtp_button_color"
+            android:textColor="@color/mdtp_date_picker_text_disabled_dark_theme"
             android:text="تاریخ انجام"
             tools:ignore="MissingConstraints" />
 
@@ -184,7 +187,7 @@
             android:layout_margin="0.5dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@color/mdtp_button_color"
+            android:textColor="@color/mdtp_date_picker_text_disabled_dark_theme"
             android:text="انجام دهنده"
             tools:ignore="MissingConstraints" />
 
@@ -195,7 +198,7 @@
             android:layout_margin="0.5dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@color/mdtp_button_color"
+            android:textColor="@color/mdtp_date_picker_text_disabled_dark_theme"
             android:text="نام فرایند"
             tools:ignore="MissingConstraints" />
 
@@ -205,8 +208,8 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/linearLayout_title"
-        android:layout_above="@+id/buttonRecyclerView"/>
+        android:layout_above="@+id/buttonRecyclerView"
+        android:layout_below="@+id/linearLayout_title" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/buttonRecyclerView"
