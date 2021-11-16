@@ -103,6 +103,7 @@ public class SplashActivity extends AppCompatActivity {
                             services.getChatMessageList();
                             services.sendChatMessageReadReport();
 
+
                             sleep(4 * 1000);
                             Intent i = new Intent(SplashActivity.this, MainActivity.class);
                             startActivity(i);

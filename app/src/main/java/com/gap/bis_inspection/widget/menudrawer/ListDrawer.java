@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gap.bis_inspection.R;
 import com.gap.bis_inspection.activity.AboutActivity;
+import com.gap.bis_inspection.activity.GraphActivity;
 import com.gap.bis_inspection.activity.HomeActivity;
 import com.gap.bis_inspection.activity.MainActivity;
 import com.gap.bis_inspection.activity.SettingActivity;
@@ -91,6 +92,8 @@ public class ListDrawer {
         dataList.add(new DrawerItem(R.string.label_menu_about, R.drawable.about));
 
         dataList.add(new DrawerItem(R.string.label_menu_exit, R.drawable.exit_account));
+
+        dataList.add(new DrawerItem(R.string.graph, R.drawable.exit_account));
 
         list.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
@@ -223,6 +226,10 @@ public class ListDrawer {
             });
             AlertDialog alert = builder.create();
             alert.show();*/
+        }else if (dataList.get(position).getItemName() == R.string.graph) {
+            activity.startActivity(new Intent(activity, GraphActivity.class));
+            activity.overridePendingTransition(R.anim.motion, R.anim.motion2);
+
         }
         mDrawerLayout.closeDrawer(rel);
 

@@ -186,6 +186,60 @@ public class Services {
         updateDeviceSettingByKey(deviceSetting);
     }
 
+
+    public String getChartValue() {
+        String result = null;
+        DeviceSetting deviceSetting = getDeviceSettingByKey(Constants.DEVICE_SETTING_KEY_LAST_USER_PERMISSION_SYNC_DATE);
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("username", user.getUsername());
+            jsonObject.put("tokenPass", user.getBisPassword());
+            jsonObject.put("reportDate", "");
+
+            //***************************************************************
+            if (deviceSetting.getValue() != null) {
+                jsonObject.put("lastUpdateDate", deviceSetting.getValue());
+            }
+
+            MyPostJsonService postJsonService = new MyPostJsonService(databaseManager, context);
+            result = postJsonService.sendData("getChartValueList", jsonObject, true);
+            System.out.println("====getChartValueList====" + result);
+            if (result != null) {
+                JSONObject resultJson = new JSONObject(result);
+
+            }
+
+        } catch (JSONException e) {
+            String errorMsg = e.getMessage();
+            if (errorMsg == null) {
+                errorMsg = "ChatMessageReceiver";
+            }
+            Log.d(errorMsg, errorMsg);
+        } catch (SocketTimeoutException e) {
+            String errorMsg = e.getMessage();
+            if (errorMsg == null) {
+                errorMsg = "SocketTimeoutException";
+            }
+            Log.d(errorMsg, errorMsg);
+        } catch (WebServiceException e) {
+            String errorMsg = e.getMessage();
+            if (errorMsg == null) {
+                errorMsg = "WebServiceException";
+            }
+            Log.d(errorMsg, errorMsg);
+        } catch (SocketException e) {
+            String errorMsg = e.getMessage();
+            if (errorMsg == null) {
+                errorMsg = "SocketException";
+            }
+            Log.d(errorMsg, errorMsg);
+        }
+        updateDeviceSettingByKey(deviceSetting);
+
+        return result;
+    }
+
     public void getDocumentUserList() {
         DeviceSetting deviceSetting = getDeviceSettingByKey(Constants.DEVICE_SETTING_KEY_LAST_APP_USER_SYNC_DATE);
         try {
@@ -1319,7 +1373,7 @@ public class Services {
         attachFileList = coreService.getUnSentAttachFileList();
         if (!attachFileList.isEmpty()) {
             for (AttachFile attachFile : attachFileList) {
-                resumeAttachFile(coreService, attachFile,attachFileSettingId);
+                resumeAttachFile(coreService, attachFile, attachFileSettingId);
                 counter++;
             }
         }
@@ -1843,7 +1897,7 @@ public class Services {
         }
     }
 
-    public void resumeAttachFile(CoreService coreService, AttachFile attachFile,String attachFileSettingId) {
+    public void resumeAttachFile(CoreService coreService, AttachFile attachFile, String attachFileSettingId) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("username", user.getUsername());
@@ -1930,14 +1984,14 @@ public class Services {
                                     System.out.println("attachFileList.size()====" + attachFileList.size());
 
                                     if (counter == attachFileList.size()) {
-                                        EventBus.getDefault().post(new EventBusModel(true,true,true));
+                                        EventBus.getDefault().post(new EventBusModel(true, true, true));
                                     }
 
                                 } else {
                                     attachFile.setSendingStatusEn(SendingStatusEn.AttachmentResuming.ordinal());
                                     attachFile.setSendingStatusDate(new Date());
                                     coreService.updateAttachFile(attachFile);
-                                    resumeAttachFile(coreService, attachFile,attachFileSettingId);
+                                    resumeAttachFile(coreService, attachFile, attachFileSettingId);
                                 }
                             }
                         } else {

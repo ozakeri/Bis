@@ -129,7 +129,6 @@ public class HomeActivity extends AppCompatActivity {
         user = application.getCurrentUser();
         services = new Services(getApplicationContext());
 
-
         ////****** get user image *******////
 
         if (application.getCurrentUser().getPicturePathUrl() != null && !application.getCurrentUser().getPicturePathUrl().isEmpty()) {
@@ -890,6 +889,8 @@ public class HomeActivity extends AppCompatActivity {
 
                 try {
                     JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("username", user.getUsername());
+                    jsonObject.put("tokenPass", user.getBisPassword());
                     jsonObject.put("firebaseTokenId", token);
                     MyPostJsonService postJsonService = new MyPostJsonService(null, HomeActivity.this);
                     try {

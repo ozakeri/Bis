@@ -46,6 +46,7 @@
     <string name="label_menu_floatingActionButtonAdd">افزودن</string>
     <string name="checkList">چک لیست بازدید</string>
     <string name="label_menu_exit_alert">آیا مایلید از برنامه خارج شوید؟</string>
+    <string name="graph">نمودار</string>
 
     <string name="label_home_driver">راننده</string>
     <string name="label_home_car">خودرو</string>
