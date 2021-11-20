@@ -13,7 +13,7 @@
         android:layout_height="80dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        android:background="@drawable/logo_bus_isf" />
+        android:background="@drawable/logo_bus_tehran" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="200dp"

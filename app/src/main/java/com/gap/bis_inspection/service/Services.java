@@ -187,7 +187,7 @@ public class Services {
     }
 
 
-    public String getChartValue() {
+    public String getChartValue(String date) {
         String result = null;
         DeviceSetting deviceSetting = getDeviceSettingByKey(Constants.DEVICE_SETTING_KEY_LAST_USER_PERMISSION_SYNC_DATE);
 
@@ -195,7 +195,7 @@ public class Services {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("username", user.getUsername());
             jsonObject.put("tokenPass", user.getBisPassword());
-            jsonObject.put("reportDate", "");
+            jsonObject.put("reportDate", date);
 
             //***************************************************************
             if (deviceSetting.getValue() != null) {
