@@ -6,10 +6,51 @@
     android:layout_height="match_parent"
     tools:context=".activity.GraphActivity">
 
+    <LinearLayout
+        android:id="@+id/container_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:background="@color/toolbarForm"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <com.gap.bis_inspection.util.CustomTextView
+                android:id="@+id/titleName_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentRight="true"
+                android:text="مدیریت ناوگان"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+
+            <RelativeLayout
+                android:id="@+id/backIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="true">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="15dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="5dp"
+                    android:background="@mipmap/arrow_back" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/layout_date"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/container_toolbar">
 
         <com.gap.bis_inspection.util.CustomTextView
             android:id="@+id/txt_selectDate"
@@ -39,6 +80,12 @@
 
     </RelativeLayout>
 
+    <ProgressBar
+        android:id="@+id/processBar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/graph_recyclerView"
         android:layout_width="409dp"
@@ -47,5 +94,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
 </RelativeLayout>

@@ -1,5 +1,6 @@
 package com.gap.bis_inspection.adapter.advert;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,14 +29,13 @@ import java.util.List;
 public class GraphAdapter extends RecyclerView.Adapter<GraphAdapter.CustomViewHolder> {
 
     private List<JSONObject> jsonObjectList;
-    private BarData barData;
+    private Context context;
 
-    public GraphAdapter(List<JSONObject> jsonObjectList) {
+    public GraphAdapter(List<JSONObject> jsonObjectList, Context context) {
         this.jsonObjectList = jsonObjectList;
+        this.context = context;
     }
 
-    public GraphAdapter() {
-    }
 
     @NonNull
     @Override
@@ -66,32 +66,46 @@ public class GraphAdapter extends RecyclerView.Adapter<GraphAdapter.CustomViewHo
         if (!json.isNull("chartStr")) {
             String chartStr = null;
             String str_0 = null;
+            String str_2 = null;
             int str_1 = 0;
             try {
                 chartStr = json.getString("chartStr");
                 JSONObject chartStrJsonObject = new JSONObject(chartStr);
                 List<BarEntry> entries = new ArrayList<BarEntry>();
                 List<String> xValues = new ArrayList<String>();
+                List<Integer> colors = new ArrayList<>();
                 if (!chartStrJsonObject.isNull("value")) {
                     JSONArray valueJSONArray = (JSONArray) chartStrJsonObject.getJSONArray("value");
-                    System.out.println("valueJSONArray=====" + valueJSONArray.length());
+                    //colors.add(context.getResources().getColor(R.color.colorAccent));
                     for (int j = 1; j < valueJSONArray.length(); j++) {
-                        System.out.println("valueJSONArray=====" + valueJSONArray);
                         JSONArray valueObjectJSONArray = (JSONArray) valueJSONArray.get(j);
-                        str_0 = (String) valueObjectJSONArray.get(0);
-                        str_1 = (int) valueObjectJSONArray.get(1);
-                        String str_2 = (String) valueObjectJSONArray.get(2);
-                        entries.add(new BarEntry(str_1, j - 1));
-                        xValues.add(str_0);
+                        if (valueObjectJSONArray.get(0) != null && valueObjectJSONArray.get(1) != null && valueObjectJSONArray.get(2) != null) {
+                            str_0 = (String) valueObjectJSONArray.get(0);
+                            str_1 = (int) valueObjectJSONArray.get(1);
+                            str_2 = (String) valueObjectJSONArray.get(2);
+
+                            if (str_0 != null && str_1 != 0) {
+                                    entries.add(new BarEntry(str_1, j - 1));
+                                    xValues.add(str_0);
+                                    colors.add(Color.parseColor(str_2));
+
+                                    System.out.println("======================================================================= " + j + " ==== " + position);
+                                    System.out.println("==========str_0==========" + str_0);
+                                    System.out.println("==========str_1==========" + str_1);
+                                    System.out.println("==========str_2==========" + str_2);
+
+                            }
+                        }
+
 
                     }
 
                     BarDataSet dataSet = new BarDataSet(entries, "Label");
-                    dataSet.setColor(Color.rgb(0, 155, 0));
+                    dataSet.setColors(colors);
                     dataSet.setValueTextColor(Color.rgb(0, 155, 0));
                     dataSet.setValueFormatter(new MyValueFormatter());
 
-                    barData = new BarData(xValues, dataSet);
+                    BarData barData = new BarData(xValues, dataSet);
                     holder.chart.setData(barData);
                     holder.chart.setDescription("");
                     holder.chart.invalidate();

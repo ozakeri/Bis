@@ -80,12 +80,12 @@ public class HomeActivity extends AppCompatActivity {
     private TextView companyNameTV;
     private TextView lastLoginDateTV, lastLoginDateTime_TV;
     private TextView counterTV;
-    private Button carButton, driverButton, lineButton, formsButton, reportButton, checkListButton,advertButton;
+    private Button carButton, driverButton, lineButton, formsButton, reportButton, checkListButton,advertButton,chart_Button;
     private boolean doubleBackToExitPressedOnce = false;
     private AppController application;
     private DrawerLayout drawerlayout;
     private RelativeLayout rel, menuIcon, messageButton;
-    private LinearLayout layoutForm, layoutLine, layoutCar, layoutDriver, layoutMessage, layoutReport, layoutCheckList,layoutAdvert;
+    private LinearLayout layoutForm, layoutLine, layoutCar, layoutDriver, layoutMessage, layoutReport, layoutCheckList,layoutAdvert,layout_chart;
     private Integer count = 0;
     private RecyclerView recyclerView;
     private CoreService coreService;
@@ -401,6 +401,14 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        chart_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent slideActivity = new Intent(HomeActivity.this, GraphActivity.class);
+                startActivity(slideActivity);
+            }
+        });
+
     }
 
     /**
@@ -435,6 +443,7 @@ public class HomeActivity extends AppCompatActivity {
         layoutForm = (LinearLayout) findViewById(R.id.layout_form);
         layoutCheckList = (LinearLayout) findViewById(R.id.layout_checkList);
         layoutAdvert = (LinearLayout) findViewById(R.id.layout_advert);
+        layout_chart = (LinearLayout) findViewById(R.id.layout_chart);
         carButton = (Button) findViewById(R.id.car_Button);
         driverButton = (Button) findViewById(R.id.driver_Button);
         lineButton = (Button) findViewById(R.id.line_Button);
@@ -442,6 +451,7 @@ public class HomeActivity extends AppCompatActivity {
         reportButton = (Button) findViewById(R.id.report_Button);
         checkListButton = (Button) findViewById(R.id.checkList_Button);
         advertButton = (Button) findViewById(R.id.advert_Button);
+        chart_Button = (Button) findViewById(R.id.chart_Button);
         messageButton = (RelativeLayout) findViewById(R.id.message_Button);
         drawerlayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -477,6 +487,12 @@ public class HomeActivity extends AppCompatActivity {
                 layoutAdvert.setVisibility(View.VISIBLE);
             } else {
                 layoutAdvert.setVisibility(View.GONE);
+            }
+
+            if (application.getPermissionMap().containsKey("ROLE_APP_GET_INCIDENT_ENTITY_STATISTICALLY_REPORT_LIST")) {
+                layout_chart.setVisibility(View.VISIBLE);
+            } else {
+                layout_chart.setVisibility(View.GONE);
             }
 
             if (application.getPermissionMap().containsKey("ROLE_APP_INSPECTION_CAR_VIEW_LIST")) {

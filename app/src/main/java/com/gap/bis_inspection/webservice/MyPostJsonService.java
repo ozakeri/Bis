@@ -62,18 +62,7 @@ public class MyPostJsonService {
     public MyPostJsonService(IDatabaseManager databaseManager, Context context) {
         this.context = context;
         this.databaseManager = databaseManager;
-        CoreService coreService = new CoreService(databaseManager);
-        // if (baseServiceUrl == null) {
-            /*
-            DeviceSetting deviceSetting = coreService.getDeviceSettingByKey(Constants.DEVICE_SETTING_WEB_SERVICE_URL_BASE);
-            if (deviceSetting == null) {
-                deviceSetting = new DeviceSetting();
-                deviceSetting.setKey(Constants.DEVICE_SETTING_WEB_SERVICE_URL_BASE);
-                deviceSetting.setValue(Constants.DEFAULT_WEB_SERVICE_URL);
-                deviceSetting.setDateLastChange(new Date());
-                deviceSetting = coreService.saveOrUpdateDeviceSetting(deviceSetting);
-            }
-*/
+
         //String baseService = AppController.getInstance().getSharedPreferences().getString(Constants.DOMAIN_WEB_SERVICE_URL, null);
         //String baseService = "https://bis.tehran.ir";
         String baseService = "http://192.168.2.180";
@@ -88,12 +77,7 @@ public class MyPostJsonService {
             baseServiceUrl = domain + "/rfServices/";
             System.out.println("baseServiceUrl2=" + baseServiceUrl);
         }
-
-            /*String domain = globalDomain.getDomain();
-            baseServiceUrl = "http://" + domain + "/rfServices/";*/
         System.out.println("baseServiceUrl=" + baseServiceUrl);
-
-        //  }
     }
 
     String output = "";

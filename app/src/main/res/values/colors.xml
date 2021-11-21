@@ -7,6 +7,7 @@
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
     <color name="colorAccent">#ff4b62ff</color>
+    <color name="transparent">#00ffffff</color>
 
     <color name="back_app">#f8f8f8</color>
     <color name="user_box_color">#f9f9f9</color>

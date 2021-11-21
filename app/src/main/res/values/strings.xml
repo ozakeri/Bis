@@ -56,6 +56,7 @@
     <string name="label_home_advert">تبلیغات</string>
     <string name="label_home_message">پیام ها</string>
     <string name="label_home_checkList">چک لیست ها</string>
+    <string name="label_home_chart">مدیریت ناوگان</string>
 
     <string name="label_timeFrom">از ساعت </string>
     <string name="label_timeTo">تا ساعت </string>
