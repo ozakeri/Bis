@@ -15,18 +15,28 @@
         <RelativeLayout
             android:background="@color/toolbarForm"
             android:layout_width="match_parent"
-            android:layout_height="40dp">
+            android:layout_height="50dp">
 
             <com.gap.bis_inspection.util.CustomTextView
                 android:id="@+id/titleName_TV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
-                android:layout_alignParentRight="true"
                 android:text="مدیریت ناوگان"
                 android:textColor="#ffffff"
                 android:textSize="15sp" />
+
+            <com.gap.bis_inspection.util.CustomTextView
+                android:id="@+id/txt_selectDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="1400/08/29"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
 
             <RelativeLayout
                 android:id="@+id/backIcon"
@@ -46,40 +56,6 @@
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/layout_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/container_toolbar">
-
-        <com.gap.bis_inspection.util.CustomTextView
-            android:id="@+id/txt_selectDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@drawable/border"
-            android:padding="5dp"
-            android:text="1400/08/29"
-            android:textSize="18sp" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/img_right"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/arrow_next" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/img_left"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/arrow_prev" />
-
-    </RelativeLayout>
-
     <ProgressBar
         android:id="@+id/processBar"
         android:layout_width="50dp"
@@ -90,7 +66,7 @@
         android:id="@+id/graph_recyclerView"
         android:layout_width="409dp"
         android:layout_height="729dp"
-        android:layout_below="@+id/layout_date"
+        android:layout_below="@+id/container_toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

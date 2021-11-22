@@ -101,7 +101,10 @@ public class GraphAdapter extends RecyclerView.Adapter<GraphAdapter.CustomViewHo
                     }
 
                     BarDataSet dataSet = new BarDataSet(entries, "Label");
-                    dataSet.setColors(colors);
+                    if (colors.size() != 0){
+                        dataSet.setColors(colors);
+                    }
+
                     dataSet.setValueTextColor(Color.rgb(0, 155, 0));
                     dataSet.setValueFormatter(new MyValueFormatter());
 

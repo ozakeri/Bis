@@ -1283,6 +1283,11 @@
     <string name="enter_driver_code">کد راننده را وارد کنید</string>
     <string name="enter_driver_name">نام راننده را وارد کنید</string>
 
+    <string name="ok_btn">تائید</string>
+    <string name="cancel_btn">انصراف</string>
+    <string name="today">امروز</string>
+    <string name="date_placeholder">"%s، %d %s"</string>
+
 
     <!-- com.gap.bus.web.enumtype.CompanyType.Parent = شعبه اصلی
     com.gap.bus.web.enumtype.CompanyType.BusRegion = سامانه ها
