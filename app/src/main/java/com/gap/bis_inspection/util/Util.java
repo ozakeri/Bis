@@ -17,8 +17,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.net.NetworkInterface;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class Util {
@@ -136,6 +139,20 @@ public class Util {
         String release = Build.VERSION.RELEASE;
         int sdkVersion = Build.VERSION.SDK_INT;
         return release + " (API: " + sdkVersion + ")";
+    }
+
+
+    private static final ThreadLocal<DateFormat> dateFormatThreadLocal = new ThreadLocal<DateFormat>() {
+        @Override
+        protected DateFormat initialValue() {
+            return new SimpleDateFormat("yyyyMMdd");
+        }
+    };
+
+    public static int compareDates(Date date1, Date date2) {
+        DateFormat dateFormat = dateFormatThreadLocal.get();
+        System.out.println("compareDates=" + dateFormat.format(date1).compareTo(dateFormat.format(date2)));
+        return dateFormat.format(date1).compareTo(dateFormat.format(date2));
     }
 
 }

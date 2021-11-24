@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +28,8 @@ import com.gap.bis_inspection.exception.WebServiceException;
 import com.gap.bis_inspection.service.CoreService;
 import com.gap.bis_inspection.service.Services;
 import com.gap.bis_inspection.util.DateUtils;
+import com.gap.bis_inspection.util.OnSwipeTouchListener;
+import com.gap.bis_inspection.util.Util;
 import com.gap.bis_inspection.webservice.MyPostJsonService;
 import com.gap.bis_inspection.widget.DatePicker.DatePicker;
 import com.gap.bis_inspection.widget.DatePicker.interfaces.DateSetListener;
@@ -43,6 +46,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class GraphActivity extends AppCompatActivity {
@@ -52,11 +56,17 @@ public class GraphActivity extends AppCompatActivity {
     private BarChart chart;
     private List<JSONObject> graphArray;
     private TextView txt_selectDate;
+    private LinearLayout selectDate_layout;
     private HejriUtil hejriUtil;
     private RelativeLayout backIcon;
     private ProgressBar processBar;
     private CoreService coreService;
     private DatabaseManager databaseManager;
+    private int year, month, day = 0;
+    private String dateStr = "";
+    private String strDateForTextView = "";
+    private Date date;
+    GregorianCalendar cal = (GregorianCalendar) GregorianCalendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +75,7 @@ public class GraphActivity extends AppCompatActivity {
 
         graph_recyclerView = findViewById(R.id.graph_recyclerView);
         txt_selectDate = findViewById(R.id.txt_selectDate);
+        selectDate_layout = findViewById(R.id.selectDate_layout);
         backIcon = findViewById(R.id.backIcon);
         processBar = findViewById(R.id.processBar);
         services = new Services(getApplicationContext());
@@ -74,11 +85,19 @@ public class GraphActivity extends AppCompatActivity {
         coreService = new CoreService(databaseManager);
 
         processBar.setVisibility(View.VISIBLE);
-        String strDate = CalendarUtil.convertPersianDateTime(new Date(), "yyyy/MM/dd");
-        txt_selectDate.setText("  امروز  " + " " + CommonUtil.latinNumberToPersian(strDate));
+        date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        dateStr = year + "-" + (month + 1) + "-" + day;
+        strDateForTextView = CalendarUtil.convertPersianDateTime(date, "yyyy/MM/dd");
+        txt_selectDate.setText(CommonUtil.latinNumberToPersian(strDateForTextView));
+        getChartList(dateStr);
 
 
-        getChartList(String.valueOf(new Date()));
+
 
         /*try {
             JSONObject resultJson = new JSONObject(services.getChartValue(String.valueOf(new Date())));
@@ -101,7 +120,7 @@ public class GraphActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 */
-        txt_selectDate.setOnClickListener(new View.OnClickListener() {
+        selectDate_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -131,10 +150,75 @@ public class GraphActivity extends AppCompatActivity {
             }
         });
 
-        // graph_recyclerView.setAdapter(new GraphAdapter());
+
+        graph_recyclerView.setOnTouchListener(new OnSwipeTouchListener() {
+
+            @Override
+            public boolean onSwipeLeft() {
+                overridePendingTransition(R.anim.left_out, R.anim.right_in);
+                cal.add(Calendar.DAY_OF_MONTH, -1);
+                year = cal.get(Calendar.YEAR);
+                month = cal.get(Calendar.MONTH);
+                day = cal.get(Calendar.DAY_OF_MONTH);
+                dateStr = year + "-" + (month + 1) + "-" + day;
+                getChartList(dateStr);
+                System.out.println("========onSwipeLeft=========" + dateStr);
+                return true;
+            }
+
+            @Override
+            public boolean onSwipeRight() {
+                overridePendingTransition(R.anim.left_in, R.anim.right_out);
+                Date date1 = new Date();
+
+                System.out.println("getTime=========" + date1.getTime());
+                System.out.println("getTime=========" + cal.getTime());
+
+                if (Util.compareDates(date1, cal.getTime()) >= 1) {
+
+                    cal.add(Calendar.DAY_OF_MONTH, +1);
+                    Date date = cal.getTime();
+                    year = cal.get(Calendar.YEAR);
+                    month = cal.get(Calendar.MONTH);
+                    day = cal.get(Calendar.DAY_OF_MONTH);
+
+                    dateStr = year + "-" + (month + 1) + "-" + day;
+                    getChartList(dateStr);
+                    System.out.println("========onSwipeRight=========" + dateStr);
+                    return true;
+                }
+                return false;
+
+            }
+
+            @Override
+            public boolean onSwipeBottom() {
+                // TODO Auto-generated method stub
+                return true;
+            }
+
+            @Override
+            public boolean onSwipeTop() {
+                // TODO Auto-generated method stub
+                return true;
+            }
+
+        });
+
+
+        /*graph_recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                recyclerView.removeOnScrollListener(this);
+            }
+        });*/
+
     }
 
-    private void getChartList(String date) {
+    private void getChartList(String dateStr) {
+
+        processBar.setVisibility(View.VISIBLE);
 
         class GetChartList extends AsyncTask<Void, Void, Void> {
             private String result;
@@ -150,6 +234,11 @@ public class GraphActivity extends AppCompatActivity {
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
                 processBar.setVisibility(View.GONE);
+
+                date = cal.getTime();
+                strDateForTextView = CalendarUtil.convertPersianDateTime(date, "yyyy/MM/dd");
+                txt_selectDate.setText(CommonUtil.latinNumberToPersian(strDateForTextView));
+
                 graph_recyclerView.setVisibility(View.VISIBLE);
                 if (result != null) {
                     JSONObject resultJson = null;
@@ -183,7 +272,7 @@ public class GraphActivity extends AppCompatActivity {
                         AppController application = (AppController) getApplication();
                         jsonObject.put("username", application.getCurrentUser().getUsername());
                         jsonObject.put("tokenPass", application.getCurrentUser().getBisPassword());
-                        jsonObject.put("reportDate", date);
+                        jsonObject.put("reportDate", dateStr);
                         //jsonObject.put("carInfoType", carInfoType);
                         MyPostJsonService postJsonService = new MyPostJsonService(null, GraphActivity.this);
                         try {
@@ -250,9 +339,17 @@ public class GraphActivity extends AppCompatActivity {
     private void setDate(final Calendar calendar) {
         if (calendar == null)
             return;
-        Date from_date = calendar.getTime();
-        Date to_date = calendar.getTime();
-        Date date = calendar.getTime();
+
+        cal.setTime(calendar.getTime());
+        date = cal.getTime();
+        year = cal.get(Calendar.YEAR);
+        month = cal.get(Calendar.MONTH);
+        day = cal.get(Calendar.DAY_OF_MONTH);
+        System.out.println("year=====" + year);
+        System.out.println("month=====" + (month + 1));
+        System.out.println("day=====" + day);
+        dateStr = year + "-" + (month + 1) + "-" + day;
+        getChartList(dateStr);
     }
 
 }

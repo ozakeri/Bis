@@ -24,18 +24,40 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
-                android:text="مدیریت ناوگان"
+                android:text="مدیریت تعرفه"
                 android:textColor="#ffffff"
                 android:textSize="15sp" />
 
-            <com.gap.bis_inspection.util.CustomTextView
-                android:id="@+id/txt_selectDate"
+
+            <LinearLayout
+                android:id="@+id/selectDate_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="1400/08/29"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:orientation="horizontal"
+                android:layout_centerInParent="true">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/txt_selectDate"
+                    android:background="@drawable/cal_icon" />
+
+                <com.gap.bis_inspection.util.CustomTextView
+                    android:id="@+id/txt_selectDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center_vertical"
+                    android:text="1400/08/29"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+
+            </LinearLayout>
+
+
 
 
             <RelativeLayout
@@ -56,20 +78,21 @@
 
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/processBar"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerInParent="true"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/graph_recyclerView"
         android:layout_width="409dp"
         android:layout_height="729dp"
         android:layout_below="@+id/container_toolbar"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/processBar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true" />
+
 </RelativeLayout>
