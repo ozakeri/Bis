@@ -71,7 +71,7 @@ public class GraphActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_graph);
+        setContentView(R.layout.activity_garph);
 
         graph_recyclerView = findViewById(R.id.graph_recyclerView);
         txt_selectDate = findViewById(R.id.txt_selectDate);

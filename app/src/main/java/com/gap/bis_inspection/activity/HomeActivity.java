@@ -489,11 +489,11 @@ public class HomeActivity extends AppCompatActivity {
                 layoutAdvert.setVisibility(View.GONE);
             }
 
-            if (application.getPermissionMap().containsKey("ROLE_APP_GET_INCIDENT_ENTITY_STATISTICALLY_REPORT_LIST")) {
+           /* if (application.getPermissionMap().containsKey("ROLE_APP_GET_INCIDENT_ENTITY_STATISTICALLY_REPORT_LIST")) {
                 layout_chart.setVisibility(View.VISIBLE);
             } else {
                 layout_chart.setVisibility(View.GONE);
-            }
+            }*/
 
             if (application.getPermissionMap().containsKey("ROLE_APP_INSPECTION_CAR_VIEW_LIST")) {
                 layoutCar.setVisibility(View.VISIBLE);
