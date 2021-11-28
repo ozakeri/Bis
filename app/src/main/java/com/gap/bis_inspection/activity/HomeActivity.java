@@ -31,6 +31,8 @@ import com.gap.bis_inspection.activity.car.CarActivity;
 import com.gap.bis_inspection.activity.checklist.ChecklistFormActivity;
 import com.gap.bis_inspection.activity.driver.DriverActivity;
 import com.gap.bis_inspection.activity.form.SurveyListActivity;
+import com.gap.bis_inspection.activity.graph.GraphActivity;
+import com.gap.bis_inspection.activity.graph.GraphListActivity;
 import com.gap.bis_inspection.activity.line.LineActivity;
 import com.gap.bis_inspection.activity.message.ChatGroupListActivity;
 import com.gap.bis_inspection.activity.report.ComplaintReportActivity;
@@ -404,7 +406,7 @@ public class HomeActivity extends AppCompatActivity {
         chart_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent slideActivity = new Intent(HomeActivity.this, GraphActivity.class);
+                Intent slideActivity = new Intent(HomeActivity.this, GraphListActivity.class);
                 startActivity(slideActivity);
             }
         });
@@ -489,11 +491,11 @@ public class HomeActivity extends AppCompatActivity {
                 layoutAdvert.setVisibility(View.GONE);
             }
 
-           /* if (application.getPermissionMap().containsKey("ROLE_APP_GET_INCIDENT_ENTITY_STATISTICALLY_REPORT_LIST")) {
+            if (application.getPermissionMap().containsKey("ROLE_APP_GET_MNG_FLEET_VIEW")) {
                 layout_chart.setVisibility(View.VISIBLE);
             } else {
                 layout_chart.setVisibility(View.GONE);
-            }*/
+            }
 
             if (application.getPermissionMap().containsKey("ROLE_APP_INSPECTION_CAR_VIEW_LIST")) {
                 layoutCar.setVisibility(View.VISIBLE);

@@ -48,7 +48,10 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="m">
         <activity
-            android:name=".activity.GraphActivity"
+            android:name=".activity.graph.GraphListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.graph.GraphActivity"
             android:exported="false" />
         <activity android:name=".activity.advert.EditAdvertActivity" />
         <activity android:name=".activity.advert.AdvertListActivity" />

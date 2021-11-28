@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gap.bis_inspection.R;
 import com.gap.bis_inspection.activity.AboutActivity;
-import com.gap.bis_inspection.activity.GraphActivity;
 import com.gap.bis_inspection.activity.HomeActivity;
 import com.gap.bis_inspection.activity.MainActivity;
 import com.gap.bis_inspection.activity.SettingActivity;

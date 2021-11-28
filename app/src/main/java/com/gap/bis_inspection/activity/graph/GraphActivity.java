@@ -1,4 +1,4 @@
-package com.gap.bis_inspection.activity;
+package com.gap.bis_inspection.activity.graph;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
@@ -276,7 +276,7 @@ public class GraphActivity extends AppCompatActivity {
                         //jsonObject.put("carInfoType", carInfoType);
                         MyPostJsonService postJsonService = new MyPostJsonService(null, GraphActivity.this);
                         try {
-                            result = postJsonService.sendData("getChartValueList", jsonObject, true);
+                            result = postJsonService.sendData("getMngFleetReportForTariff", jsonObject, true);
                         } catch (SocketTimeoutException | SocketException e) {
                             errorMsg = getResources().getString(R.string.Some_error_accor_contact_admin);
                         } catch (WebServiceException e) {
